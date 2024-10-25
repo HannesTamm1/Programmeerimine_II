@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KooliProjekt.Data.User>
+﻿@model PagedResult<KooliProjekt.Data.User>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,19 +13,20 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Username)
+               Username
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+               Password
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CreatedAt)
+                CreatedAt
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model.Results)
+        {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Username)
@@ -45,3 +46,5 @@
 }
     </tbody>
 </table>
+
+@(await Component.InvokeAsync<PagerViewComponent>(Model))

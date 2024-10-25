@@ -19,9 +19,9 @@ namespace KooliProjekt.Controllers
         }
 
         // GET: Categories
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            return View(await _context.Category.ToListAsync());
+            return View(await _context.Category.GetPagedAsync(page,2));
         }
 
         // GET: Categories/Details/5
