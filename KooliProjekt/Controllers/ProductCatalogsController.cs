@@ -9,22 +9,22 @@ using KooliProjekt.Data;
 
 namespace KooliProjekt.Controllers
 {
-    public class OrdersController : Controller
+    public class ProductCatalogsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public OrdersController(ApplicationDbContext context)
+        public ProductCatalogsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Orders
+        // GET: ProductCatalogs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Orders.ToListAsync());
+            return View(await _context.ProductCatalogs.ToListAsync());
         }
 
-        // GET: Orders/Details/5
+        // GET: ProductCatalogs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
+            var productCatalog = await _context.ProductCatalogs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (productCatalog == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(productCatalog);
         }
 
-        // GET: Orders/Create
+        // GET: ProductCatalogs/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Orders/Create
+        // POST: ProductCatalogs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Status,ClientId")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,CategoryName,ProductId")] ProductCatalog productCatalog)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(order);
+                _context.Add(productCatalog);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(productCatalog);
         }
 
-        // GET: Orders/Edit/5
+        // GET: ProductCatalogs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
+            var productCatalog = await _context.ProductCatalogs.FindAsync(id);
+            if (productCatalog == null)
             {
                 return NotFound();
             }
-            return View(order);
+            return View(productCatalog);
         }
 
-        // POST: Orders/Edit/5
+        // POST: ProductCatalogs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Status,ClientId")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryName,ProductId")] ProductCatalog productCatalog)
         {
-            if (id != order.Id)
+            if (id != productCatalog.Id)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace KooliProjekt.Controllers
             {
                 try
                 {
-                    _context.Update(order);
+                    _context.Update(productCatalog);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!ProductCatalogExists(productCatalog.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace KooliProjekt.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(productCatalog);
         }
 
-        // GET: Orders/Delete/5
+        // GET: ProductCatalogs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,34 +123,34 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
+            var productCatalog = await _context.ProductCatalogs
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (productCatalog == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(productCatalog);
         }
 
-        // POST: Orders/Delete/5
+        // POST: ProductCatalogs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
+            var productCatalog = await _context.ProductCatalogs.FindAsync(id);
+            if (productCatalog != null)
             {
-                _context.Orders.Remove(order);
+                _context.ProductCatalogs.Remove(productCatalog);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderExists(int id)
+        private bool ProductCatalogExists(int id)
         {
-            return _context.Orders.Any(e => e.Id == id);
+            return _context.ProductCatalogs.Any(e => e.Id == id);
         }
     }
 }

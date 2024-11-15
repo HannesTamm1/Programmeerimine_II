@@ -9,22 +9,22 @@ using KooliProjekt.Data;
 
 namespace KooliProjekt.Controllers
 {
-    public class OrdersController : Controller
+    public class UserDatasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public OrdersController(ApplicationDbContext context)
+        public UserDatasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Orders
+        // GET: UserDatas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Orders.ToListAsync());
+            return View(await _context.UserDatas.ToListAsync());
         }
 
-        // GET: Orders/Details/5
+        // GET: UserDatas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
+            var userData = await _context.UserDatas
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (userData == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(userData);
         }
 
-        // GET: Orders/Create
+        // GET: UserDatas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Orders/Create
+        // POST: UserDatas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Status,ClientId")] Order order)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Amount,ProductId,Discount")] UserData userData)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(order);
+                _context.Add(userData);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(userData);
         }
 
-        // GET: Orders/Edit/5
+        // GET: UserDatas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
+            var userData = await _context.UserDatas.FindAsync(id);
+            if (userData == null)
             {
                 return NotFound();
             }
-            return View(order);
+            return View(userData);
         }
 
-        // POST: Orders/Edit/5
+        // POST: UserDatas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Status,ClientId")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Amount,ProductId,Discount")] UserData userData)
         {
-            if (id != order.Id)
+            if (id != userData.Id)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace KooliProjekt.Controllers
             {
                 try
                 {
-                    _context.Update(order);
+                    _context.Update(userData);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!UserDataExists(userData.Id))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace KooliProjekt.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(userData);
         }
 
-        // GET: Orders/Delete/5
+        // GET: UserDatas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,34 +123,34 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var order = await _context.Orders
+            var userData = await _context.UserDatas
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (order == null)
+            if (userData == null)
             {
                 return NotFound();
             }
 
-            return View(order);
+            return View(userData);
         }
 
-        // POST: Orders/Delete/5
+        // POST: UserDatas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
+            var userData = await _context.UserDatas.FindAsync(id);
+            if (userData != null)
             {
-                _context.Orders.Remove(order);
+                _context.UserDatas.Remove(userData);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderExists(int id)
+        private bool UserDataExists(int id)
         {
-            return _context.Orders.Any(e => e.Id == id);
+            return _context.UserDatas.Any(e => e.Id == id);
         }
     }
 }

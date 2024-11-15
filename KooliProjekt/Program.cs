@@ -11,7 +11,8 @@ namespace KooliProjekt
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -20,7 +21,28 @@ namespace KooliProjekt
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddScoped<, >();
+            builder.Services.AddScoped<, >();
+
             var app = builder.Build();
+
+            // Andmebaasi seedimine ainult Debug buildis
+#if DEBUG
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                // Käivitame migratsioonid
+                context.Database.Migrate();
+
+                // Kutsume SeedData.Generate meetodi andmete lisamiseks
+                SeedData.GenerateProducts(context);
+                SeedData.GenerateCustomers(context);
+                SeedData.CatalogGenerate(context);
+                SeedData.OrderGenerator(context);
+
+            }
+#endif
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -30,7 +52,6 @@ namespace KooliProjekt
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -46,14 +67,7 @@ namespace KooliProjekt
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
-#if DEBUG
-            using (IServiceScope scope = builder.Services.CreateScope())
-            using (var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>())
-            {
-                context.Database.EnsureCreated();
-                SeedData.Generate(context);
-            }
-#endif
+
             app.Run();
         }
     }

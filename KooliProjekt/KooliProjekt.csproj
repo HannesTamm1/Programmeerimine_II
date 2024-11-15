@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,6 +6,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-KooliProjekt-115D48C3-5103-4503-B901-745AFD125276</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Properties\launchSettings.json" />
+    <Content Include="Properties\serviceDependencies.json" />
+    <Content Include="Properties\serviceDependencies.local.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\corporate\img\.DS_Store" />
+    <None Include="wwwroot\assets\corporate\img\icons\.DS_Store" />
+    <None Include="wwwroot\assets\pages\img\icons\.DS_Store" />
+    <None Include="wwwroot\assets\pages\img\shop-slider\.DS_Store" />
+    <None Include="wwwroot\assets\plugins\rateit\.DS_Store" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.10" />
@@ -17,6 +31,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
