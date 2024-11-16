@@ -1,4 +1,4 @@
-﻿@model PagedResult<KooliProjekt.Data.Product>
+﻿@model IEnumerable<KooliProjekt.Data.Product>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,26 +13,25 @@
     <thead>
         <tr>
             <th>
-                Name
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                Description
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                ImageURL
+                @Html.DisplayNameFor(model => model.ImageURL)
             </th>
             <th>
-                Price
+                @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                Category
+                @Html.DisplayNameFor(model => model.CategoryId)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Results)
-        {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -47,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryId)
+                @Html.DisplayFor(modelItem => item.CategoryId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
@@ -58,5 +57,3 @@
 }
     </tbody>
 </table>
-
-@(await Component.InvokeAsync<PagerViewComponent>(Model))
