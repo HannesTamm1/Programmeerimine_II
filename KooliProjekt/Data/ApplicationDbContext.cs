@@ -9,10 +9,10 @@ namespace KooliProjekt.Data
             : base(options)
         {
         }
-        public DbSet<Category> Category { get; set; }
-        public DbSet<OrderItem> OrderItem { get; set; }
-        public DbSet<Order> Order { get; set; }
-        public DbSet<Product> Product { get; set; }
-        public DbSet<User> User { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+        public DbSet<OrderItems> OrderItems { get; set; }
+        public DbSet<Orders> Orders { get; set; }
+        public DbSet<Products> Products { get; set; }
+        public DbSet<user> user { get; set; }
     }
 }

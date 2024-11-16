@@ -1,10 +1,10 @@
 ﻿namespace KooliProjekt.Data
 {
-    public class User
+    public class user
     {
-        public int UserId { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public int id { get; set; }
+        public string username { get; set; }
+        public string password { get; set; }
+        public DateTime created_at { get; set; }
     }
 }

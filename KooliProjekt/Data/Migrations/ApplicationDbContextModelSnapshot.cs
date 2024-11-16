@@ -22,124 +22,124 @@ namespace KooliProjekt.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("KooliProjekt.Data.Category", b =>
+            modelBuilder.Entity("KooliProjekt.Data.Categories", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CategoryId");
+                    b.HasKey("id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("KooliProjekt.Data.Order", b =>
+            modelBuilder.Entity("KooliProjekt.Data.OrderItems", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<int>("order_id")
+                        .HasColumnType("int");
+
+                    b.Property<float>("price_at_order")
+                        .HasColumnType("real");
+
+                    b.Property<int>("product_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("KooliProjekt.Data.Orders", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("LineItem")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("user_id")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId");
+                    b.HasKey("id");
 
-                    b.ToTable("Order");
+                    b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("KooliProjekt.Data.OrderItem", b =>
+            modelBuilder.Entity("KooliProjekt.Data.Products", b =>
                 {
-                    b.Property<int>("OrderItemId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("OrderId")
+                    b.Property<int>("category_id")
                         .HasColumnType("int");
 
-                    b.Property<float>("PriceAtOrder")
-                        .HasColumnType("real");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrderItemId");
-
-                    b.ToTable("OrderItem");
-                });
-
-            modelBuilder.Entity("KooliProjekt.Data.Product", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
+                    b.Property<string>("description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageURL")
+                    b.Property<string>("image_url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("KooliProjekt.Data.User", b =>
+            modelBuilder.Entity("KooliProjekt.Data.user", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("created_at")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("username")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("id");
 
-                    b.ToTable("User");
+                    b.ToTable("user");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
