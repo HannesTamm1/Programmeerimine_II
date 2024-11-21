@@ -1,48 +1,31 @@
-﻿
+﻿@model IEnumerable<KooliProjekt.Data.Product>
+
 @{
     ViewData["Title"] = "Index";
-    @model IEnumerable<KooliProjekt.Data.Product>
-    @if (Model != null)
-    {
-        @(await Component.InvokeAsync<PagerViewComponent>(Model))
-    }
-    else
-    {
-        <p>No data available.</p>
-    }
-
-    {
-        ViewData["Title"] = "Index";
-    }
 }
 
 <h1>Index</h1>
 
 <p>
-    public async Task<IActionResult> Index(int page = 1)
-    {
-        var pagedResult = await _context.Products.GetPagedAsync(page, 5);
-        return View(pagedResult.Items); // Assuming pagedResult.Items is of type IEnumerable<Product>
-    }
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.PhotoUrl)
             </th>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.Category)
             </th>
             <th></th>
         </tr>

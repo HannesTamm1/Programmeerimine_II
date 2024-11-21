@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<KooliProjekt.Data.User>
-@(await Component.InvokeAsync<PagerViewComponent>(Model))
 
 @{
     ViewData["Title"] = "Index";
@@ -14,10 +13,10 @@
     <thead>
         <tr>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.Username)
             </th>
             <th>
-                Title
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th></th>
         </tr>
