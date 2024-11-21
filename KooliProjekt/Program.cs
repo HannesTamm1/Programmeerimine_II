@@ -47,6 +47,14 @@ namespace KooliProjekt
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
+            if (app.Environment.IsDevelopment())
+            {
+                using var scope = app.Services.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                context.Database.Migrate();
+                SeedData.Generate(context);
+            }
+
             app.Run();
         }
     }

@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<KooliProjekt.Data.Order>
+@(await Component.InvokeAsync<PagerViewComponent>(Model))
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +14,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DeliveryDate)
+                Title
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                Title
             </th>
             <th></th>
         </tr>
