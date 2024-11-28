@@ -10,10 +10,10 @@ namespace KooliProjekt.Data
         public required string Status { get; set; }
 
         // Foreign key to User
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
 
         // Navigation property to User
-        public User User { get; set; }
+        public required User User { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
 
