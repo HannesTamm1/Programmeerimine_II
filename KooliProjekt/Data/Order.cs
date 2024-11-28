@@ -8,6 +8,13 @@ namespace KooliProjekt.Data
         public DateTime OrderDate { get; set; }
         public DateTime? DeliveryDate { get; set; }
         public required string Status { get; set; }
+
+        // Foreign key to User
+        public string UserId { get; set; }
+
+        // Navigation property to User
+        public User User { get; set; }
+
         public ICollection<OrderProduct> OrderProducts { get; set; }
 
         public Order()

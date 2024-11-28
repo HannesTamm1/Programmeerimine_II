@@ -1,10 +1,8 @@
-﻿@model IEnumerable<KooliProjekt.Data.OrderProduct>
+﻿@model PagedResult<KooliProjekt.Data.OrderProduct>
 
-@{
-    ViewData["Title"] = "Index";
-}
+@(await Component.InvokeAsync<PagerViewComponent>(Model))
 
-<h1>Index</h1>
+<h1>Order Products</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -12,36 +10,26 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Order)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Product)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PriceAtOrderTime)
-            </th>
+            <th>Order ID</th>
+            <th>Product ID</th>
+            <th>Price at Order Time</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Order.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Product.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PriceAtOrderTime)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Results)
+        {
+            <!-- Use Model.Results -->
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Order.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Product.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.PriceAtOrderTime)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
