@@ -1,4 +1,5 @@
 ﻿using KooliProjekt.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace KooliProjekt.Data
@@ -71,6 +72,11 @@ new Order { OrderDate = DateTime.Now, Status = "Shipped", UserId = users[1].Id.T
 
             context.OrderProducts.AddRange(orderProducts);
             context.SaveChanges();  // Save OrderProducts to database
+        }
+
+        internal static void Initialize(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

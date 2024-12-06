@@ -2,9 +2,8 @@
 
 namespace KooliProjekt.Data
 {
-    public class User
+    public class User : Entity
     {
-        public int Id { get; set; }
         public required string Username { get; set; }
         public required string Email { get; set; }
     }

@@ -1,56 +1,36 @@
 ﻿using KooliProjekt.Data;
-using Microsoft.EntityFrameworkCore;
+using KooliProjekt.Data.Repositories;
+using KooliProjekt.Models;
 
 namespace KooliProjekt.Services
 {
     public class OrderService : IOrderService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public OrderService(ApplicationDbContext context)
+        public OrderService(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<PagedResult<Order>> List(int page, int pageSize)
         {
-            return await _context.Orders
-                .Include(o => o.User) // Include related User
-                .Include(o => o.OrderProducts) // Include related OrderProducts
-                .GetPagedAsync(page, pageSize);
+            return await _unitOfWork.OrderRepository.List(page, pageSize);
         }
 
         public async Task<Order> Get(int id)
         {
-            return await _context.Orders
-                .Include(o => o.User)
-                .Include(o => o.OrderProducts)
-                .ThenInclude(op => op.Product) // Include products for the order
-                .FirstOrDefaultAsync(o => o.Id == id);
+            return await _unitOfWork.OrderRepository.Get(id);
         }
 
         public async Task Save(Order order)
         {
-            if (order.Id == 0)
-            {
-                _context.Add(order);
-            }
-            else
-            {
-                _context.Update(order);
-            }
-
-            await _context.SaveChangesAsync();
+            await _unitOfWork.OrderRepository.Save(order);
         }
 
         public async Task Delete(int id)
         {
-            var order = await _context.Orders.FindAsync(id);
-            if (order != null)
-            {
-                _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
-            }
+            await _unitOfWork.OrderRepository.Delete(id);
         }
     }
 }

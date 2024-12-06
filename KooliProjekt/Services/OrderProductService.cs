@@ -1,53 +1,35 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 public class OrderProductService : IOrderProductService
 {
-    private readonly ApplicationDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public OrderProductService(ApplicationDbContext context)
+    public OrderProductService(IUnitOfWork unitOfWork)
     {
-        _context = context;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<PagedResult<OrderProduct>> List(int page, int pageSize)
     {
-        return await _context.OrderProducts
-            .Include(op => op.Order) // Include related data
-            .Include(op => op.Product)
-            .OrderBy(op => op.Id)
-            .GetPagedAsync(page, pageSize);
+        return await _unitOfWork.OrderProductRepository.List(page, pageSize);
+
     }
 
     public async Task<OrderProduct> Get(int id)
     {
-        return await _context.OrderProducts
-            .Include(op => op.Order)
-            .Include(op => op.Product)
-            .FirstOrDefaultAsync(op => op.Id == id);
+        return await _unitOfWork.OrderProductRepository.Get(id);
     }
 
     public async Task Save(OrderProduct orderProduct)
     {
-        if (orderProduct.Id == 0)
-        {
-            _context.OrderProducts.Add(orderProduct);
-        }
-        else
-        {
-            _context.OrderProducts.Update(orderProduct);
-        }
-        await _context.SaveChangesAsync();
+        await _unitOfWork.OrderProductRepository.Save(orderProduct);
     }
 
     public async Task Delete(int id)
     {
-        var orderProduct = await _context.OrderProducts.FindAsync(id);
-        if (orderProduct != null)
-        {
-            _context.OrderProducts.Remove(orderProduct);
-            await _context.SaveChangesAsync();
-        }
+        await _unitOfWork.OrderProductRepository.Delete(id);
     }
 }
 

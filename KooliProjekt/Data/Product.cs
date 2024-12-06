@@ -2,7 +2,7 @@
 
 namespace KooliProjekt.Data
 {
-    public class Product
+    public class Product : Entity
     {
         public int Id { get; set; }
         public required string Name { get; set; }

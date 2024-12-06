@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace KooliProjekt.Data
+﻿namespace KooliProjekt.Data
 {
-    public class Category
+    public class Category : Entity
     {
-        public int Id { get; set; }
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
