@@ -8,6 +8,11 @@ namespace KooliProjekt.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
+        public ProductService(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
         public ProductService(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;

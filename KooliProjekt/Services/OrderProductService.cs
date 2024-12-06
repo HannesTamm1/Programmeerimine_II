@@ -1,6 +1,5 @@
 ﻿using KooliProjekt.Data;
 using KooliProjekt.Data.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 public class OrderProductService : IOrderProductService
 {
