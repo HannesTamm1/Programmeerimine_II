@@ -8,9 +8,9 @@ namespace KooliProjekt.Data.Repositories
         public UserRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public async Task<User> Get(int id)
+        public async Task<PagedResult<User>> Get(int id)
         {
-            return await DbContext.Users.FindAsync(id);
+            return await DbContext.Users.GetPagedAsync(id, 1);
         }
 
         public async Task<User> GetByEmail(string email)
