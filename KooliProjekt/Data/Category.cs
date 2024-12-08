@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KooliProjekt.Data
 {
@@ -6,5 +7,7 @@ namespace KooliProjekt.Data
     {
         public int Id { get; set; }
         public required string Name { get; set; }
+        [NotMapped]
+        public string? Title { get; internal set; }
     }
 }

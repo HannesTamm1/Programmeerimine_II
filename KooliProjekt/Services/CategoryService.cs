@@ -1,4 +1,5 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Search;
 using Microsoft.EntityFrameworkCore;
 
 namespace KooliProjekt.Services
@@ -12,14 +13,33 @@ namespace KooliProjekt.Services
             _context = context;
         }
 
-        public async Task<PagedResult<Category>> List(int page, int pageSize)
+        public async Task Delete(int id)
         {
-            return await _context.Categories.OrderBy(c => c.Name).GetPagedAsync(page, pageSize);
+            await _context.Categories
+                .Where(list => list.Id == id)
+                .ExecuteDeleteAsync();
         }
 
         public async Task<Category> Get(int id)
         {
-            return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            return await _context.Categories.FindAsync(id);
+        }
+
+        public async Task<PagedResult<Category>> List(int page, int pageSize, CategoriesSearch search = null)
+        {
+            var query = _context.Categories.AsQueryable();
+
+            search = search ?? new CategoriesSearch();
+
+            if (!string.IsNullOrWhiteSpace(search.Keyword))
+            {
+                query = query.Where(category => category.Name.Contains(search.Keyword));
+            }
+
+            // Return paginated results
+            return await query
+                .OrderBy(category => category.Name)
+                .GetPagedAsync(page, pageSize);
         }
 
         public async Task Save(Category category)
@@ -33,16 +53,6 @@ namespace KooliProjekt.Services
                 _context.Categories.Update(category);
             }
             await _context.SaveChangesAsync();
-        }
-
-        public async Task Delete(int id)
-        {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
-            }
         }
     }
 }

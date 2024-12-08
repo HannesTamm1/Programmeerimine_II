@@ -1,4 +1,5 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Models;
 using KooliProjekt.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +14,13 @@ namespace KooliProjekt.Controllers
             _categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, CategoriesIndexModel model = null)
         {
-            var categories = await _categoryService.List(page, pageSize);
-            return View(categories);
+            model = model ?? new CategoriesIndexModel();
+            model.Data = await _categoryService.List(page, 10, model.Search);
+            return View(model);
         }
+
 
         public async Task<IActionResult> Details(int id)
         {
