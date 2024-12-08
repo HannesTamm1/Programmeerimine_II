@@ -1,6 +1,8 @@
-﻿using KooliProjekt.Data;
+﻿using KooliProjekt.Models;
 using KooliProjekt.Services;
+using KooliProjekt.Search;
 using Microsoft.AspNetCore.Mvc;
+using KooliProjekt.Data;
 
 namespace KooliProjekt.Controllers
 {
@@ -13,20 +15,26 @@ namespace KooliProjekt.Controllers
             _productService = productService;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(int page = 1, ProductsIndexModel model = null)
         {
-            var products = await _productService.List(page, pageSize);
-            return View(products);
+            model = model ?? new ProductsIndexModel();
+            model.Data = await _productService.List(page, 10, model.Search);
+            return View(model);
         }
-
-        public async Task<IActionResult> Details(int id)
+public async Task<IActionResult> Details(int? id)
         {
-            var product = await _productService.Get(id);
-            if (product == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            return View(product);
+
+            var Product = await _productService.Get(id.Value);
+            if (Product == null)
+            {
+                return NotFound();
+            }
+
+            return View(Product);
         }
 
         public IActionResult Create()
