@@ -8,14 +8,10 @@ namespace KooliProjekt.Data
         public static void Generate(ApplicationDbContext context)
         {
             // Check if there is any data in the database
-            if (context.Orders.Any() || context.Products.Any() || context.Users.Any() || context.Categories.Any())
+            if (!context.Orders.Any() && !context.Products.Any() && !context.Users.Any() && !context.Categories.Any())
             {
-                // If data exists, return
-                return;
-            }
-
-            // Add sample Categories
-            var categories = new List<Category>
+                // Add sample Categories
+                var categories = new List<Category>
             {
                 new Category { Name = "Electronics" },
                 new Category { Name = "Clothing" },
@@ -24,11 +20,11 @@ namespace KooliProjekt.Data
                 new Category { Name = "Furniture" }
             };
 
-            context.Categories.AddRange(categories);
-            context.SaveChanges();  // Save categories to database
+                context.Categories.AddRange(categories);
+                context.SaveChanges();  // Save categories to database
 
-            // Add sample Products
-            var products = new List<Product>
+                // Add sample Products
+                var products = new List<Product>
             {
                 new Product { Name = "Laptop", Description = "A powerful laptop", Category = categories[0], Price = 1000 },
                 new Product { Name = "Smartphone", Description = "Latest model smartphone", Category = categories[0], Price = 800 },
@@ -39,38 +35,39 @@ namespace KooliProjekt.Data
                 new Product { Name = "Sofa", Description = "Comfortable leather sofa", Category = categories[4], Price = 500 }
             };
 
-            context.Products.AddRange(products);
-            context.SaveChanges();  // Save products to database
+                context.Products.AddRange(products);
+                context.SaveChanges();  // Save products to database
 
-            // Add sample Users
-            var users = new List<User>
+                // Add sample Users
+                var users = new List<User>
             {
                 new User { Username = "john_doe", Email = "john@example.com" },
                 new User { Username = "jane_doe", Email = "jane@example.com" }
             };
 
-            context.Users.AddRange(users);
-            context.SaveChanges();  // Save users to database
+                context.Users.AddRange(users);
+                context.SaveChanges();  // Save users to database
 
-            // Add sample Orders
-            var orders = new List<Order>
+                // Add sample Orders
+                var orders = new List<Order>
             {
 new Order { OrderDate = DateTime.Now, Status = "Processing", UserId = users[0].Id.ToString(), User = users[0] },
 new Order { OrderDate = DateTime.Now, Status = "Shipped", UserId = users[1].Id.ToString(), User = users[1] }
             };
 
-            context.Orders.AddRange(orders);
-            context.SaveChanges();  // Save orders to database
+                context.Orders.AddRange(orders);
+                context.SaveChanges();  // Save orders to database
 
-            // Optionally, you can add OrderProducts if necessary
-            var orderProducts = new List<OrderProduct>
+                // Optionally, you can add OrderProducts if necessary
+                var orderProducts = new List<OrderProduct>
             {
                 new OrderProduct { OrderId = orders[0].Id, ProductId = products[0].Id, PriceAtOrderTime = products[0].Price },
                 new OrderProduct { OrderId = orders[1].Id, ProductId = products[2].Id, PriceAtOrderTime = products[2].Price }
             };
 
-            context.OrderProducts.AddRange(orderProducts);
-            context.SaveChanges();  // Save OrderProducts to database
+                context.OrderProducts.AddRange(orderProducts);
+                context.SaveChanges();  // Save OrderProducts to database
+            }
         }
     }
 }

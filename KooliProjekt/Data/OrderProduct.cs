@@ -8,5 +8,6 @@
         public int ProductId { get; set; }
         public Product Product { get; set; } = null!;
         public decimal PriceAtOrderTime { get; set; }
+        public string Title { get; set; }
     }
 }

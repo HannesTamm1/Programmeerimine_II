@@ -7,15 +7,20 @@ namespace KooliProjekt.Data
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public DateTime? DeliveryDate { get; set; }
-        public required string Status { get; set; }
+
+        [Required]
+        public string Status { get; set; }
 
         // Foreign key to User
-        public required string UserId { get; set; }
+        [Required]
+        public string UserId { get; set; }
 
         // Navigation property to User
-        public required User User { get; set; }
+        [Required]
+        public User User { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
+        public string Title { get; set; }
 
         public Order()
         {
