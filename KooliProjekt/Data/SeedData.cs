@@ -51,8 +51,8 @@ namespace KooliProjekt.Data
                 // Add sample Orders
                 var orders = new List<Order>
             {
-new Order { OrderDate = DateTime.Now, Status = "Processing", UserId = users[0].Id.ToString(), User = users[0] },
-new Order { OrderDate = DateTime.Now, Status = "Shipped", UserId = users[1].Id.ToString(), User = users[1] }
+                new Order { OrderDate = DateTime.Now, Status = "Processing", UserId = users[0].Id.ToString(), User = users[0], Title = "Product" },
+                new Order { OrderDate = DateTime.Now, Status = "Shipped", UserId = users[1].Id.ToString(), User = users[1], Title = "Product" }
             };
 
                 context.Orders.AddRange(orders);

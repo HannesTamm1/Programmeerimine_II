@@ -21,7 +21,7 @@ namespace KooliProjekt.Controllers
             model.Data = await _productService.List(page, 10, model.Search);
             return View(model);
         }
-public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
