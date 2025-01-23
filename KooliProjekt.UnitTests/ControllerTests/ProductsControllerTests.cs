@@ -47,6 +47,138 @@ namespace KooliProjekt.UnitTests.ControllerTests
 
 
         }
+        [Fact]
+        public async Task Details_should_return_notfound_when_id_is_missing()
+        {
+            // Arrange
+            int? id = null;
 
+            // Act
+            var result = await _controller.Details(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task Details_should_return_notfound_when_product_is_missing()
+        {
+            // Arrange
+            int id = 1;
+            Product product = null;
+            _productServiceMock.Setup(x => x.Get(id)).ReturnsAsync(product);
+
+            // Act
+            var result = await _controller.Details(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+
+        }
+        [Fact]
+        public async Task Details_should_return_view_with_model_when_product_was_found()
+        {
+            // Arrange
+            int id = 1;
+            var product = new Product { Id = id, Name = "Product1" };
+            _productServiceMock.Setup(x => x.Get(id)).ReturnsAsync(product);
+
+            // Act
+            var result = await _controller.Details(id) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(product, result?.Model);
+        }
+        [Fact]
+        public void Create_should_return_view()
+        {
+            // Act
+            var result = _controller.Create() as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task Edit_should_return_notfound_when_id_is_missing()
+        {
+            // Arrange
+            int id = 1;
+
+            // Act
+            var result = await _controller.Edit(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task Edit_should_return_notfound_when_product_is_missing()
+        {
+            // Arrange
+            int id = 1;
+            Product product = null;
+            _productServiceMock.Setup(x => x.Get(id)).ReturnsAsync(product);
+
+            // Act
+            var result = await _controller.Edit(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task Edit_should_return_view_with_model_when_product_was_found()
+        {
+            // Arrange
+            int id = 1;
+            var product = new Product { Id = id, Name = "Product1" };
+            _productServiceMock.Setup(x => x.Get(id)).ReturnsAsync(product);
+
+            // Act
+            var result = await _controller.Edit(id) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(product, result?.Model);
+        }
+        [Fact]
+        public async Task Delete_should_return_notfound_when_id_is_missing()
+        {
+            // Arrange
+            int id = 1;
+
+            // Act
+            var result = await _controller.Delete(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task Delete_should_return_notfound_when_product_is_missing()
+        {
+            // Arrange
+            int id = 1;
+            Product product = null;
+            _productServiceMock.Setup(x => x.Get(id)).ReturnsAsync(product);
+
+            // Act
+            var result = await _controller.Delete(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task Delete_should_return_view_with_model_when_product_was_found()
+        {
+            // Arrange
+            int id = 1;
+            var product = new Product { Id = id, Name = "Product1" };
+            _productServiceMock.Setup(x => x.Get(id)).ReturnsAsync(product);
+
+            // Act
+            var result = await _controller.Delete(id) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(product, result?.Model);
+        }
     }
 }
