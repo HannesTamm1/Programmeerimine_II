@@ -180,5 +180,22 @@ namespace KooliProjekt.UnitTests.ControllerTests
             Assert.NotNull(result);
             Assert.Equal(product, result?.Model);
         }
+        [Fact]
+        public async Task DeleteConfirmed_should_delete_list()
+        {
+            // Arrange
+            int id = 1;
+            _productServiceMock
+                .Setup(x => x.Delete(id))
+        .Verifiable();
+            _controller.ModelState.AddModelError("key", "error");
+
+            // Act
+            var result = await _controller.DeleteConfirmed(id) as RedirectToActionResult;
+
+            // Assert
+            Assert.NotNull(result);
+            _productServiceMock.VerifyAll();
+        }
     }
 }
