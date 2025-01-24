@@ -49,5 +49,161 @@ namespace KooliProjekt.UnitTests.ControllerTests
             Assert.Equal(data, model.Data);
             Assert.Equal(model, result.Model);
         }
+        [Fact]
+        public async Task Details_Should_Return_NotFound_When_Id_Is_Missing()
+        {
+            // Arrange
+            int id = 1;
+
+            // Act
+            var result = await _controller.Details(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+        [Fact]
+        public async Task Details_should_return_notfound_when_category_is_missing()
+        {
+            // Arrange
+            int id = 1;
+            var category = (Category)null;
+            _categoryServiceMock.Setup(x => x.Get(id)).ReturnsAsync(category);
+
+            // Act
+            var result = await _controller.Details(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task Details_should_return_view_with_model_when_category_was_found()
+        {
+            // Arrange
+            int id = 1;
+            var category = new Category { Id = id, Name = "Category 1" };
+            _categoryServiceMock.Setup(x => x.Get(id)).ReturnsAsync(category);
+
+            // Act
+            var result = await _controller.Details(id) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(
+                string.IsNullOrEmpty(result.ViewName) ||
+                result.ViewName == "Details"
+            );
+            Assert.Equal(category, result.Model);
+        }
+
+        [Fact]
+        public void Create_should_return_view()
+        {
+            // Act
+            var result = _controller.Create() as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(
+                string.IsNullOrEmpty(result.ViewName) ||
+                result.ViewName == "Create"
+            );
+        }
+
+        [Fact]
+        public async Task Edit_should_return_notfound_when_id_is_missing()
+        {
+            // Arrange
+            int id = 1;
+
+            // Act
+            var result = await _controller.Edit(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task Edit_should_return_notfound_when_category_is_missing()
+        {
+            // Arrange
+            int id = 1;
+            var category = (Category)null;
+            _categoryServiceMock.Setup(x => x.Get(id)).ReturnsAsync(category);
+
+            // Act
+            var result = await _controller.Edit(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task Edit_should_return_view_with_model_when_category_was_found()
+        {
+            // Arrange
+            int id = 1;
+            var category = new Category { Id = id, Name = "Category 1" };
+            _categoryServiceMock.Setup(x => x.Get(id)).ReturnsAsync(category);
+
+            // Act
+            var result = await _controller.Edit(id) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(
+                string.IsNullOrEmpty(result.ViewName) ||
+                result.ViewName == "Edit"
+            );
+            Assert.Equal(category, result.Model);
+        }
+
+        [Fact]
+        public async Task Delete_should_return_notfound_when_id_is_missing()
+        {
+            // Arrange
+            int id = 1;
+
+            // Act
+            var result = await _controller.Delete(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task Delete_should_return_notfound_when_category_is_missing()
+        {
+            // Arrange
+            int id = 1;
+            var category = (Category)null;
+            _categoryServiceMock.Setup(x => x.Get(id)).ReturnsAsync(category);
+
+            // Act
+            var result = await _controller.Delete(id) as NotFoundResult;
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task Delete_should_return_view_with_model_when_category_was_found()
+        {
+            // Arrange
+            int id = 1;
+            var category = new Category { Id = id, Name = "Category 1" };
+            _categoryServiceMock.Setup(x => x.Get(id)).ReturnsAsync(category);
+
+            // Act
+            var result = await _controller.Delete(id) as ViewResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(
+                string.IsNullOrEmpty(result.ViewName) ||
+                result.ViewName == "Delete"
+            );
+            Assert.Equal(category, result.Model);
+        }
     }
 }
