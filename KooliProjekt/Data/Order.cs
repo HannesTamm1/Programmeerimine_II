@@ -26,5 +26,10 @@ namespace KooliProjekt.Data
         {
             OrderProducts = new List<OrderProduct>();
         }
+
+        public static implicit operator Order(Order v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
