@@ -7,7 +7,6 @@ namespace KooliProjekt.Data
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        [NotMapped]
-        public string? Title { get; internal set; }
+        public string Title { get; internal set; }
     }
 }

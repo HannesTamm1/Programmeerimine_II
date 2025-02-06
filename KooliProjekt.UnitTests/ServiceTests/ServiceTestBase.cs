@@ -12,11 +12,11 @@ namespace KooliProjekt.UnitTests.ServiceTests
         {
             get
             {
-                if (_dbContext != null)
+                if(_dbContext != null)
                 {
                     return _dbContext;
                 }
-
+                
                 var options = new DbContextOptionsBuilder<ApplicationDbContext>()
                     .UseInMemoryDatabase(Guid.NewGuid().ToString())
                     .Options;
@@ -45,4 +45,3 @@ namespace KooliProjekt.UnitTests.ServiceTests
         }
     }
 }
-
