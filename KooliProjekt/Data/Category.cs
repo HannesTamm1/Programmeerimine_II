@@ -6,7 +6,7 @@ namespace KooliProjekt.Data
     public class Category
     {
         public int Id { get; set; }
-        public required string Name { get; set; }
-        public string Title { get; internal set; }
+        public string Name { get; set; }
+        public string Title { get; set; }
     }
 }

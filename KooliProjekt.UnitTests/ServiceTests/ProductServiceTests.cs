@@ -10,23 +10,23 @@ using Xunit;
 
 namespace KooliProjekt.UnitTests.ServiceTests
 {
-    public class ProductServiceTests
+    public class ProductServiceTests : ServiceTestBase
     {
         [Fact]
         public async Task Save_should_add_new_list()
         {
             // Arrange
             var service = new ProductService(DbContext);
-            var product = new Product { Category = "Test" };
+            var product = new Product { Name = "Test" };
 
             // Act
             await service.Save(product);
 
             // Assert
-            var count = DbContext.TodoLists.Count();
-            var result = DbContext.TodoLists.FirstOrDefault();
+            var count = DbContext.Products.Count();
+            var result = DbContext.Products.FirstOrDefault();
             Assert.Equal(1, count);
-            Assert.Equal(product.Category, result.Title);
+            Assert.Equal(product.Name, result.Name);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace KooliProjekt.UnitTests.ServiceTests
         {
             // Arrange
             var service = new ProductService(DbContext);
-            var product = new Product { Category = "Test" };
+            var product = new Product { Name = "Test" };
             DbContext.Products.Add(product);
             DbContext.SaveChanges();
 

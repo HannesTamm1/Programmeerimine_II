@@ -14,26 +14,23 @@ namespace KooliProjekt.UnitTests.ServiceTests
     {
 
         [Fact]
-        public Task Save_should_add_new_list()
+        public async Task Save_should_add_new_list()
         {
             // Arrange
             var service = new CategoryService(DbContext);
-            var category = new Category { Title = "Test" };
+            var category = new Category
+            {
+                Title = "Test",
+                Name = "Test Category"  // ✅ Add required Name field
+            };
 
-            // Act
-            service.Save(category);
+            await service.Save(category);
 
             // Assert
             var count = DbContext.Categories.Count();
             var result = DbContext.Categories.FirstOrDefault();
             Assert.Equal(1, count);
             Assert.Equal(category.Title, result.Title);
-            return Task.CompletedTask;
-        }
-
-        private void Save(Category category)
-        {
-            throw new NotImplementedException();
         }
 
         [Fact]
@@ -41,12 +38,15 @@ namespace KooliProjekt.UnitTests.ServiceTests
         {
             // Arrange
             var service = new CategoryService(DbContext);
-            var category = new Category { Title = "Test" };
+            var category = new Category { Id = 1, Title = "Test" };
             DbContext.Categories.Add(category);
-            DbContext.SaveChanges();
+            await DbContext.SaveChangesAsync();
+
+
+            var categoryId = category.Id;
 
             // Act
-            await service.Delete(1);
+            await service.Delete(categoryId);  // ✅ Use actual ID
 
             // Assert
             var count = DbContext.Categories.Count();

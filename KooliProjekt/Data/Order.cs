@@ -13,7 +13,7 @@ namespace KooliProjekt.Data
 
         // Foreign key to User
         [Required]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         // Navigation property to User
         [Required]
@@ -21,15 +21,5 @@ namespace KooliProjekt.Data
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
         public string Title { get; set; }
-
-        public Order()
-        {
-            OrderProducts = new List<OrderProduct>();
-        }
-
-        public static implicit operator Order(OrderProduct v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

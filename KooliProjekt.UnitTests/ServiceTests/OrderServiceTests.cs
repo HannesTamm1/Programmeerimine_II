@@ -16,7 +16,12 @@ namespace KooliProjekt.UnitTests.ServiceTests
         {
             // Arrange
             var service = new OrderService(DbContext);
-            var order = new Order { Title = "Test" };
+            var order = new Order
+            {
+                Title = "Test",
+                Status = "Pending",
+                UserId = 1         
+            };
 
             // Act
             await service.Save(order);
@@ -28,21 +33,32 @@ namespace KooliProjekt.UnitTests.ServiceTests
             Assert.Equal(order.Title, result.Title);
         }
 
+
         [Fact]
         public async Task Delete_should_remove_given_list()
         {
             // Arrange
             var service = new OrderService(DbContext);
-            var order = new Order { Title = "Test" };
+            var order = new Order
+            {
+                Title = "Test",
+                Status = "Pending",  // ✅ Set required Status
+                UserId = 1           // ✅ Set required UserId
+            };
+
             DbContext.Orders.Add(order);
-            DbContext.SaveChanges();
+            await DbContext.SaveChangesAsync();  // ✅ Use async save
+
+            // Get the generated ID
+            var orderId = order.Id;
 
             // Act
-            await service.Delete(1);
+            await service.Delete(orderId);  // ✅ Use actual ID
 
             // Assert
             var count = DbContext.Orders.Count();
             Assert.Equal(0, count);
         }
+
     }
 }

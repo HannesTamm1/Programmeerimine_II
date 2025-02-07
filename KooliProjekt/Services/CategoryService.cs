@@ -15,10 +15,14 @@ namespace KooliProjekt.Services
 
         public async Task Delete(int id)
         {
-            await _context.Categories
-                .Where(list => list.Id == id)
-                .ExecuteDeleteAsync();
+            var category = await _context.Categories.FindAsync(id);  // Find the category by ID
+            if (category != null)  // Check if the category exists
+            {
+                _context.Categories.Remove(category);  // Remove the category
+                await _context.SaveChangesAsync();     // Save changes to the database
+            }
         }
+
 
         public async Task<Category> Get(int id)
         {
