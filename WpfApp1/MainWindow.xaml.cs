@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
@@ -10,7 +11,7 @@ using System.Windows.Input;
 
 namespace WpfApp1
 {
-    public class Product : INotifyPropertyChanged
+    public partial class Product : INotifyPropertyChanged
     {
         private int _id;
         private string _name;
@@ -24,6 +25,36 @@ namespace WpfApp1
         private void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        private void ShowCode_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Path to the XAML.cs file
+                string filePath = "MainWindow.xaml.cs"; // Adjust as needed
+                if (File.Exists(filePath))
+                {
+                    // Read and display the file content
+                    CodeViewer.Text = File.ReadAllText(filePath);
+                }
+                else
+                {
+                    CodeViewer.Text = "File not found.";
+                }
+            }
+            catch (Exception ex)
+            {
+                CodeViewer.Text = "Error: " + ex.Message;
+            }
         }
     }
 
@@ -104,15 +135,6 @@ namespace WpfApp1
                 await _service.DeleteProductAsync(SelectedProduct.Id);
                 await LoadProducts();
             }
-        }
-    }
-
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            InitializeComponent();
-            DataContext = new ProductViewModel();
         }
     }
 
