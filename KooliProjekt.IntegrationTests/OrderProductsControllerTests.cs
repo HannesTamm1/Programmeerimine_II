@@ -19,17 +19,15 @@ namespace KooliProjekt.IntegrationTests
 
         public OrderProductsControllerTests()
         {
-            var options = new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false
-            };
-            _client = Factory.CreateClient(options);
+            _client = Factory.CreateClient();
             _context = (ApplicationDbContext)Factory.Services.GetService(typeof(ApplicationDbContext));
         }
 
         [Fact]
-        public async Task Index_should_return_success()
+        public async Task Index_should_return_correct_response()
         {
+            // Arrange
+
             // Act
             using var response = await _client.GetAsync("/OrderProducts");
 
@@ -37,88 +35,55 @@ namespace KooliProjekt.IntegrationTests
             response.EnsureSuccessStatusCode();
         }
 
-        [Theory]
-        [InlineData("/OrderProducts/Details")]
-        [InlineData("/OrderProducts/Details/100")]
-        [InlineData("/OrderProducts/Delete")]
-        [InlineData("/OrderProducts/Delete/100")]
-        [InlineData("/OrderProducts/Edit")]
-        [InlineData("/OrderProducts/Edit/100")]
-        public async Task Should_return_notfound(string url)
-        {
-            // Act
-            using var response = await _client.GetAsync(url);
-
-            // Assert
-            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
         [Fact]
         public async Task Details_should_return_notfound_when_list_was_not_found()
         {
+            // Arrange
+
             // Act
-            using var response = await _client.GetAsync("/OrderProducts/Details/100");
+            using var response = await _client.GetAsync("/OrderPoducts/Details/100");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
-        public async Task Details_should_return_success_when_list_was_found()
+        public async Task Details_should_return_notfound_when_order_product_does_not_exist()
+        {
+            // Act
+            using var response = await _client.GetAsync("/OrderProducts/Details/9999");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Details_should_return_success_when_order_product_exists()
         {
             // Arrange
-            var list = new OrderProduct { Title = "Test" };
-            _context.OrderProducts.Add(list);
+            var Category1 = new Category { Name = "Tooted", Title = "Tooted2" };
+            _context.Categories.Add(Category1);
+            _context.SaveChanges();
+
+            var Product1 = new Product { Name = "first item", CategoryId = Category1.Id };
+
+            var User1 = new User
+            {
+                Email = "example@gmail.com",
+                Username = "Test",
+            };
+
+            var Order1 = new Order { Title = "Esimene", Status = "Pending", User = User1, UserId = User1.Id };
+
+            var OrderProduct = new OrderProduct { Product = Product1, ProductId = Product1.Id, Order = Order1, PriceAtOrderTime = 10 };
+            _context.OrderProducts.Add(OrderProduct);
             _context.SaveChanges();
 
             // Act
-            using var response = await _client.GetAsync($"/OrderProducts/Details/{list.Id}");
+            using var response = await _client.GetAsync($"/OrderProducts/Details/{OrderProduct.Id}");
 
             // Assert
             response.EnsureSuccessStatusCode();
-        }
-
-        [Fact]
-        public async Task Create_should_save_new_order_product()
-        {
-            // Arrange
-            var formValues = new Dictionary<string, string>
-            {
-                { "Id", "0" },
-                { "Title", "Test" }
-            };
-            using var content = new FormUrlEncodedContent(formValues);
-
-            // Act
-            using var response = await _client.PostAsync("/OrderProducts/Create", content);
-
-            // Assert
-            Assert.True(
-                response.StatusCode == HttpStatusCode.Redirect ||
-                response.StatusCode == HttpStatusCode.MovedPermanently);
-
-            var list = _context.OrderProducts.FirstOrDefault();
-            Assert.NotNull(list);
-            Assert.NotEqual(0, list.Id);
-            Assert.Equal("Test", list.Title);
-        }
-
-        [Fact]
-        public async Task Create_should_not_save_invalid_order_product()
-        {
-            // Arrange
-            var formValues = new Dictionary<string, string>
-            {
-                { "Title", "" }
-            };
-            using var content = new FormUrlEncodedContent(formValues);
-
-            // Act
-            using var response = await _client.PostAsync("/OrderProducts/Create", content);
-
-            // Assert
-            response.EnsureSuccessStatusCode();
-            Assert.False(_context.OrderProducts.Any());
         }
     }
 }

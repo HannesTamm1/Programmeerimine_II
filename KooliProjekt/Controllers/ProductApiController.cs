@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KooliProjekt.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Products")]
     [ApiController]
     public class ProductApiController : ControllerBase
     {

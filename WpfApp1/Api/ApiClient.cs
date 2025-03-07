@@ -10,7 +10,7 @@ namespace WpfApp1.Api
         public ApiClient()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7600/api/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7136/api/");
         }
 
         public async Task<List<Product>> List()

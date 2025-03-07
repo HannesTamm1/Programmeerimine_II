@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
+
 
 #nullable disable
 
@@ -7,6 +10,14 @@ namespace KooliProjekt.Data.Migrations
     /// <inheritdoc />
     public partial class updatedatabase : Migration
     {
+        public override IModel TargetModel => base.TargetModel;
+
+        public override IReadOnlyList<MigrationOperation> UpOperations => base.UpOperations;
+
+        public override IReadOnlyList<MigrationOperation> DownOperations => base.DownOperations;
+
+        public override string ActiveProvider { get => base.ActiveProvider; set => base.ActiveProvider = value; }
+
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -164,6 +175,21 @@ namespace KooliProjekt.Data.Migrations
                 principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }
