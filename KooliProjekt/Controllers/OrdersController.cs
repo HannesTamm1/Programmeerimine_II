@@ -1,4 +1,7 @@
-﻿using KooliProjekt.Data;
+﻿using System.Windows.Controls;
+using KooliProjekt.Data;
+using KooliProjekt.Models;
+using KooliProjekt.Search;
 using KooliProjekt.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,11 +17,15 @@ namespace KooliProjekt.Controllers
         }
 
         // GET: TodoLists
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(OrderSearch search, int page = 1, int pageSize = 10)
         {
-            var data = await _orderService.List(page, 5);
+            var model = new OrdersIndexModel
+            {
+                Search = search,
+                Data = await _orderService.List(page, pageSize, search)
+            };
 
-            return View(data);
+            return View(model);
         }
 
         // GET: TodoLists/Details/5
@@ -49,17 +56,6 @@ namespace KooliProjekt.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title")] Order order)
-        {
-            if (ModelState.IsValid)
-            {
-                await _orderService.Save(order);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(order);
-        }
-
-        // GET: TodoLists/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -67,33 +63,33 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var order = await _orderService.Get(id.Value);
-            if (order == null)
+            var orders = await _orderService.Get(id.Value);
+            if (orders == null)
             {
                 return NotFound();
             }
-            return View(order);
+            return View(orders);
         }
 
-        // POST: TodoLists/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // GET: TodoLists/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Unit,UnitCost,Manufacturer")] Order orders)
         {
-            if (id != order.Id)
+            if (id != orders.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await _orderService.Save(order);
+                await _orderService.Save(orders);
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            return View(orders);
         }
+
+    
 
         // GET: TodoLists/Delete/5
         public async Task<IActionResult> Delete(int? id)

@@ -1,15 +1,29 @@
-﻿@model PagedResult<KooliProjekt.Data.Order>
+﻿@model KooliProjekt.Models.OrdersIndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Orders";
 }
 
 <h1>Orders</h1>
 
+<form asp-action="Index" method="get">
+    <div class="form-group">
+        <label for="title">Order Title:</label>
+        <input type="text" class="form-control" id="title" name="Search.Title" value="@Model.Search?.Title" />
+    </div>
+    <div class="form-group">
+        <label for="status">Status:</label>
+        <input type="text" class="form-control" id="status" name="Search.Status" value="@Model.Search?.Status" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-secondary">Clear</a>
+    </div>
+</form>
+
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
-
 
 <table class="table">
     <thead>
@@ -21,7 +35,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Results)
+        @foreach (var item in Model.Data.Results)
         {
             <tr>
                 <td>@item.Id</td>
@@ -31,11 +45,10 @@
                     @if (item.User != null)
                     {
                         @item.User.Username
-                        // Display the user's name if the User exists
                     }
                     else
                     {
-                        @:No User // Display "No User" when there is no associated User
+                        @:No User
                     }
                 </td>
                 <td>
@@ -45,8 +58,7 @@
                 </td>
             </tr>
         }
-
     </tbody>
 </table>
 
-@(await Component.InvokeAsync<PagerViewComponent>(Model))
+@(await Component.InvokeAsync<PagerViewComponent>(Model.Data))

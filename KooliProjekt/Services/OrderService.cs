@@ -1,4 +1,5 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Search;
 using Microsoft.EntityFrameworkCore;
 
 namespace KooliProjekt.Services
@@ -12,9 +13,25 @@ namespace KooliProjekt.Services
             _context = context;
         }
 
-        public async Task<PagedResult<Order>> List(int page, int pageSize)
+        public async Task<PagedResult<Order>> List(int page, int pageSize, OrderSearch search = null)
         {
-            return await _context.Orders.GetPagedAsync(page, 5);
+            var query = _context.Orders.AsQueryable();
+
+            if (search != null)
+            {
+                if (!string.IsNullOrWhiteSpace(search.Title))
+                {
+                    query = query.Where(o => o.Title.Contains(search.Title));
+                }
+                if (!string.IsNullOrWhiteSpace(search.Status))
+                {
+                    query = query.Where(o => o.Status.Contains(search.Status));
+                }
+            }
+
+            return await query
+                .OrderBy(p => p.Title)
+                .GetPagedAsync(page, pageSize);
         }
 
         public async Task<Order> Get(int id)

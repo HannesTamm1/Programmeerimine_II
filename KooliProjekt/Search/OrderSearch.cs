@@ -2,7 +2,7 @@
 {
     public class OrderSearch
     {
-        public bool? Done { get; set; }
-        public string Keyword { get; set; }
+        public string Title { get; set; }
+        public string Status { get; set; }
     }
 }
