@@ -6,7 +6,7 @@ namespace KooliProjekt.Services
     {
         Task<PagedResult<Order>> List(int page, int pageSize);
         Task<Order> Get(int id);
-        Task Save(Order order);
+        Task Save(Order list);
         Task Delete(int id);
     }
 }

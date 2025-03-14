@@ -14,30 +14,23 @@ namespace KooliProjekt.Services
 
         public async Task<PagedResult<Order>> List(int page, int pageSize)
         {
-            return await _context.Orders
-                .Include(o => o.User) // Include related User
-                .Include(o => o.OrderProducts) // Include related OrderProducts
-                .GetPagedAsync(page, pageSize);
+            return await _context.Orders.GetPagedAsync(page, 5);
         }
 
         public async Task<Order> Get(int id)
         {
-            return await _context.Orders
-                .Include(o => o.User)
-                .Include(o => o.OrderProducts)
-                .ThenInclude(op => op.Product) // Include products for the order
-                .FirstOrDefaultAsync(o => o.Id == id);
+            return await _context.Orders.FirstOrDefaultAsync(m => m.Id == id);
         }
 
-        public async Task Save(Order order)
+        public async Task Save(Order list)
         {
-            if (order.Id == 0)
+            if (list.Id == 0)
             {
-                _context.Add(order);
+                _context.Add(list);
             }
             else
             {
-                _context.Update(order);
+                _context.Update(list);
             }
 
             await _context.SaveChangesAsync();
