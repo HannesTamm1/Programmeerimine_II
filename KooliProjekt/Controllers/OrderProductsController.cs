@@ -1,4 +1,6 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Models;
+using KooliProjekt.Search;
 using KooliProjekt.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +15,17 @@ namespace KooliProjekt.Controllers
             _orderProductService = orderProductService;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(OrderProductsSearch search, int page = 1, int pageSize = 10)
         {
-            var orderProducts = await _orderProductService.List(page, pageSize);
-            return View(orderProducts); // Pass the PagedResult<OrderProduct> to the view
+            var model = new OrderProductsIndexModel
+            {
+                Search = search,
+                Data = await _orderProductService.List(page, pageSize, search)
+            };
+
+            return View(model);
         }
+
 
 
         public async Task<IActionResult> Details(int id)

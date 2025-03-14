@@ -1,8 +1,23 @@
-﻿@model PagedResult<KooliProjekt.Data.OrderProduct>
-
-@(await Component.InvokeAsync<PagerViewComponent>(Model))
+﻿@model KooliProjekt.Models.OrderProductsIndexModel
 
 <h1>Order Products</h1>
+
+<form asp-action="Index" method="get">
+    <div class="form-group">
+        <label for="keyword">Search by Title or Product ID:</label>
+        <input type="text" class="form-control" id="keyword" name="Search.Keyword" value="@Model.Search?.Keyword" />
+    </div>
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="Search.Done" value="true" @(Model.Search?.Done == true ? "checked" : "") />
+            Done Orders
+        </label>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-secondary">Clear</a>
+    </div>
+</form>
 
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
@@ -18,9 +33,8 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Results)
+        @foreach (var item in Model.Data.Results)
         {
-            <!-- Use Model.Results -->
             <tr>
                 <td>@Html.DisplayFor(modelItem => item.Order.Id)</td>
                 <td>@Html.DisplayFor(modelItem => item.Product.Id)</td>
@@ -34,3 +48,5 @@
         }
     </tbody>
 </table>
+
+@(await Component.InvokeAsync<PagerViewComponent>(Model.Data))

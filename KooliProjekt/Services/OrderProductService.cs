@@ -1,4 +1,5 @@
 ﻿using KooliProjekt.Data;
+using KooliProjekt.Search;
 using Microsoft.EntityFrameworkCore;
 
 public class OrderProductService : IOrderProductService
@@ -10,14 +11,31 @@ public class OrderProductService : IOrderProductService
         _context = context;
     }
 
-    public async Task<PagedResult<OrderProduct>> List(int page, int pageSize)
+    public async Task<PagedResult<OrderProduct>> List(int page, int pageSize, OrderProductsSearch search = null)
     {
-        return await _context.OrderProducts
-            .Include(op => op.Order) // Include related data
+        var query = _context.OrderProducts
+            .Include(op => op.Order)
             .Include(op => op.Product)
+            .AsQueryable();
+
+        if (search != null)
+        {
+            if (!string.IsNullOrWhiteSpace(search.Keyword))
+            {
+                query = query.Where(op => op.Title.Contains(search.Keyword) ||
+                                          op.ProductId.ToString().Contains(search.Keyword));
+            }
+            if (search.Done.HasValue && search.Done.Value)
+            {
+                query = query.Where(op => op.Order.Status == "Completed");
+            }
+        }
+
+        return await query
             .OrderBy(op => op.Id)
             .GetPagedAsync(page, pageSize);
     }
+
 
     public async Task<OrderProduct> Get(int id)
     {
