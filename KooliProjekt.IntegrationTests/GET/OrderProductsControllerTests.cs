@@ -9,7 +9,7 @@ using KooliProjekt.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-namespace KooliProjekt.IntegrationTests
+namespace KooliProjekt.IntegrationTests.GET
 {
     [Collection("Sequential")]
     public class OrderProductsControllerTests : TestBase

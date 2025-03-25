@@ -6,15 +6,15 @@ using KooliProjekt.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
-namespace KooliProjekt.IntegrationTests
+namespace KooliProjekt.IntegrationTests.GET
 {
     [Collection("Sequential")]
-    public class ProductsControllerTests : TestBase
+    public class UsersControllerTests : TestBase
     {
         private readonly HttpClient _client;
         private readonly ApplicationDbContext _context;
 
-        public ProductsControllerTests()
+        public UsersControllerTests()
         {
             var options = new WebApplicationFactoryClientOptions
             {
@@ -28,46 +28,42 @@ namespace KooliProjekt.IntegrationTests
         public async Task Index_should_return_success()
         {
             // Act
-            using var response = await _client.GetAsync("/Products");
+            using var response = await _client.GetAsync("/Users");
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [Fact]
-        public async Task Details_should_return_notfound_when_product_does_not_exist()
+        public async Task Details_should_return_notfound_when_user_does_not_exist()
         {
             // Act
-            using var response = await _client.GetAsync("/Products/Details/9999");
+            using var response = await _client.GetAsync("/Users/Details/9999");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
-        public async Task Details_should_return_success_when_product_exists()
+        public async Task Details_should_return_success_when_user_exists()
         {
             // Arrange
-            var category = new Category { Name = "Test Category" };
-            _context.Categories.Add(category);
-            _context.SaveChanges();
-
-            var product = new Product { Name = "Test Product", CategoryId = category.Id, Price = 10 };
-            _context.Products.Add(product);
+            var user = new User { Username = "TestUser", Email = "test@example.com" };
+            _context.Users.Add(user);
             _context.SaveChanges();
 
             // Act
-            using var response = await _client.GetAsync($"/Products/Details/{product.Id}");
+            using var response = await _client.GetAsync($"/Users/Details/{user.Id}");
 
             // Assert
             response.EnsureSuccessStatusCode();
         }
 
         [Fact]
-        public async Task Delete_should_return_notfound_when_product_does_not_exist()
+        public async Task Delete_should_return_notfound_when_user_does_not_exist()
         {
             // Act
-            using var response = await _client.GetAsync("/Products/Delete/9999");
+            using var response = await _client.GetAsync("/Users/Delete/9999");
 
             // Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);

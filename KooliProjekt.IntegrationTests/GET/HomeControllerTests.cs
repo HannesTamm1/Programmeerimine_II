@@ -2,7 +2,7 @@
 using KooliProjekt.IntegrationTests.Helpers;
 using Xunit;
 
-namespace KooliProjekt.IntegrationTests
+namespace KooliProjekt.IntegrationTests.GET
 {
     [Collection("Sequential")]
     public class HomeControllerTests : TestBase
