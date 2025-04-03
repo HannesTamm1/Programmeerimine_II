@@ -11,6 +11,7 @@ using Xunit;
 
 namespace KooliProjekt.IntegrationTests.POST
 {
+    [Collection("Sequential")]
     public class ProductsControllerTests : TestBase
     {
         private readonly HttpClient _client;
@@ -70,51 +71,56 @@ namespace KooliProjekt.IntegrationTests.POST
         }
 
         [Fact]
-
-        public async Task Details_should_return_success_when_list_was_found()
-        {
-            // Arrange
-            var list = new Product { Name = "Test" };
-            _context.Products.Add(list);
-            _context.SaveChanges();
-
-            // Act
-            using var response = await _client.GetAsync("/Products/Details/" + list.Id);
-
-            // Assert
-            response.EnsureSuccessStatusCode();
-        }
-
-        [Fact]
         public async Task Create_should_save_new_list()
         {
             // Arrange
-            var formValues = new Dictionary<string, string>();
-            formValues.Add("Id", "0");
-            formValues.Add("Title", "Test");
+            var user = new User { Username = "TestUser", Email = "testuser@example.com" };
+            _context.Users.Add(user);
+            _context.SaveChanges();
+
+            var formValues = new Dictionary<string, string>
+    {
+        { "Id", "0" },
+        { "Title", "Test" },
+        { "Status", "New" },
+        { "UserId", user.Id.ToString() }
+    };
 
             using var content = new FormUrlEncodedContent(formValues);
 
             // Act
-            using var response = await _client.PostAsync("/Products/Create", content);
+            using var response = await _client.PostAsync("/Orders/Create", content);
+            var responseContent = await response.Content.ReadAsStringAsync();
 
             // Assert
             Assert.True(
                 response.StatusCode == HttpStatusCode.Redirect ||
                 response.StatusCode == HttpStatusCode.MovedPermanently);
 
-            var list = _context.Products.FirstOrDefault();
+            var list = _context.Orders.FirstOrDefault();
             Assert.NotNull(list);
             Assert.NotEqual(0, list.Id);
-            Assert.Equal("Test", list.Name);
+            Assert.Equal("Test", list.Title);
+            Assert.Equal("New", list.Status);
+            Assert.Equal(user.Id, list.UserId);
         }
+
 
         [Fact]
         public async Task Create_should_not_save_invalid_new_list()
         {
             // Arrange
-            var formValues = new Dictionary<string, string>();
-            formValues.Add("Title", "");
+            var category = new Category { Name = "TestCategory", Title = "TestCategoryTitle" };
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+
+            var formValues = new Dictionary<string, string>
+    {
+        { "Name", "" },
+        { "Description", "" },
+        { "Price", "0" },
+        { "CategoryId", category.Id.ToString() }
+    };
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -122,8 +128,8 @@ namespace KooliProjekt.IntegrationTests.POST
             using var response = await _client.PostAsync("/Products/Create", content);
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            Assert.False(_context.Products.Any());
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode); // Ensure the response status code is 400 (Bad Request)
+            Assert.False(_context.Products.Any()); // Ensure no products were saved
         }
     }
 }

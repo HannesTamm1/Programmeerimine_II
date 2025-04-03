@@ -21,9 +21,10 @@ namespace KooliProjekt.UnitTests.ServiceTests
             var category = new Category
             {
                 Title = "Test",
-                Name = "Test Category"  // ✅ Add required Name field
+                Name = "Test Category"
             };
 
+            // Act
             await service.Save(category);
 
             // Assert

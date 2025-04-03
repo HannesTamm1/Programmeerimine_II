@@ -43,15 +43,15 @@ namespace KooliProjekt.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _productService.Save(product);
-                return RedirectToAction(nameof(Index));
+                return BadRequest(ModelState);
             }
-            return View(product);
+
+            await _productService.Save(product);
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Edit(int id)

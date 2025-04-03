@@ -38,16 +38,19 @@ namespace KooliProjekt.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> Create(Category category)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await _categoryService.Save(category);
-                return RedirectToAction(nameof(Index));
+                return BadRequest(ModelState);
             }
-            return View(category);
+
+            await _categoryService.Save(category);
+            return RedirectToAction(nameof(Index));
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {

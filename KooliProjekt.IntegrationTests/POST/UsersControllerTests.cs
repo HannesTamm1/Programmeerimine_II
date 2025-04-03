@@ -10,6 +10,7 @@ using Xunit;
 
 namespace KooliProjekt.IntegrationTests.POST
 {
+    [Collection("Sequential")]
     public class UsersControllerTests : TestBase
     {
         private readonly HttpClient _client;
@@ -90,7 +91,8 @@ namespace KooliProjekt.IntegrationTests.POST
             // Arrange
             var formValues = new Dictionary<string, string>();
             formValues.Add("Id", "0");
-            formValues.Add("Title", "Test");
+            formValues.Add("Username", "Test");
+            formValues.Add("Email", "gg");
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -106,7 +108,7 @@ namespace KooliProjekt.IntegrationTests.POST
             Assert.NotNull(list);
             Assert.NotEqual(0, list.Id);
             Assert.Equal("Test", list.Username);
-            Assert.Equal("gg", list.Email);  
+            Assert.Equal("gg", list.Email);
         }
 
         [Fact]
@@ -114,7 +116,7 @@ namespace KooliProjekt.IntegrationTests.POST
         {
             // Arrange
             var formValues = new Dictionary<string, string>();
-            formValues.Add("Title", "");
+            formValues.Add("Username", "");
 
             using var content = new FormUrlEncodedContent(formValues);
 

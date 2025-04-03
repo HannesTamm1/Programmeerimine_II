@@ -1,7 +1,8 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
+using WpfApp1.Api;
 
-namespace WpfApp1.Api
+namespace KooliProjekt.WpfApp.Api
 {
     public class ApiClient : IApiClient
     {
@@ -15,19 +16,30 @@ namespace WpfApp1.Api
 
         public async Task<List<Product>> List()
         {
-            var result = await _httpClient.GetFromJsonAsync<List<Product>>("Products");
+            var result = new List<Product>();
+
+            try
+            {
+                result = await _httpClient.GetFromJsonAsync<List<Product>>("Product");
+            }
+            catch (Exception ex)
+            {
+                // Handle the error appropriately
+                throw new Exception("Error fetching product list", ex);
+            }
+
             return result;
         }
 
-        public async Task Save(Product list)
+        public async Task Save(Product product)
         {
-            if (list.Id == 0)
+            if (product.Id == 0)
             {
-                await _httpClient.PostAsJsonAsync("Products", list);
+                await _httpClient.PostAsJsonAsync("Products", product);
             }
             else
             {
-                await _httpClient.PutAsJsonAsync("Products/" + list.Id, list);
+                await _httpClient.PutAsJsonAsync("Products/" + product.Id, product);
             }
         }
 

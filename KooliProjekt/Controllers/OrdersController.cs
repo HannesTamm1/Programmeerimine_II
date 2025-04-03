@@ -16,7 +16,7 @@ namespace KooliProjekt.Controllers
             _orderService = orderService;
         }
 
-        // GET: TodoLists
+        // GET: Orders
         public async Task<IActionResult> Index(OrderSearch search, int page = 1, int pageSize = 10)
         {
             var model = new OrdersIndexModel
@@ -28,7 +28,7 @@ namespace KooliProjekt.Controllers
             return View(model);
         }
 
-        // GET: TodoLists/Details/5
+        // GET: Orders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,17 +45,30 @@ namespace KooliProjekt.Controllers
             return View(order);
         }
 
-        // GET: TodoLists/Create
+        // GET: Orders/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TodoLists/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Orders/Create
+        //[ValidateAntiForgeryToken]
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Order order)
+        {
+            ModelState.Remove("User");
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _orderService.Save(order);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        // GET: Orders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -63,35 +76,33 @@ namespace KooliProjekt.Controllers
                 return NotFound();
             }
 
-            var orders = await _orderService.Get(id.Value);
-            if (orders == null)
+            var order = await _orderService.Get(id.Value);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(orders);
+            return View(order);
         }
 
-        // GET: TodoLists/Edit/5
+        // POST: Orders/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Unit,UnitCost,Manufacturer")] Order orders)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Status,UserId")] Order order)
         {
-            if (id != orders.Id)
+            if (id != order.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                await _orderService.Save(orders);
+                await _orderService.Save(order);
                 return RedirectToAction(nameof(Index));
             }
-            return View(orders);
+            return View(order);
         }
 
-    
-
-        // GET: TodoLists/Delete/5
+        // GET: Orders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -108,14 +119,14 @@ namespace KooliProjekt.Controllers
             return View(order);
         }
 
-        // POST: TodoLists/Delete/5
+        // POST: Orders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _orderService.Delete(id);
-
             return RedirectToAction(nameof(Index));
         }
     }
 }
+

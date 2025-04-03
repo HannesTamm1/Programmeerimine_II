@@ -71,7 +71,6 @@ namespace KooliProjekt.IntegrationTests.POST
         }
 
         [Fact]
-
         public async Task Details_should_return_success_when_list_was_found()
         {
             // Arrange
@@ -90,9 +89,12 @@ namespace KooliProjekt.IntegrationTests.POST
         public async Task Create_should_save_new_list()
         {
             // Arrange
-            var formValues = new Dictionary<string, string>();
-            formValues.Add("Id", "0");
-            formValues.Add("Title", "Test");
+            var formValues = new Dictionary<string, string>
+    {
+        { "Id", "0" },
+        { "Name", "Test Category" },
+        { "Title", "Test" }
+    };
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -108,14 +110,18 @@ namespace KooliProjekt.IntegrationTests.POST
             Assert.NotNull(list);
             Assert.NotEqual(0, list.Id);
             Assert.Equal("Test", list.Title);
+            Assert.Equal("Test Category", list.Name);
         }
+
 
         [Fact]
         public async Task Create_should_not_save_invalid_new_list()
         {
             // Arrange
-            var formValues = new Dictionary<string, string>();
-            formValues.Add("Title", "");
+            var formValues = new Dictionary<string, string>
+    {
+        { "Title", "" }
+    };
 
             using var content = new FormUrlEncodedContent(formValues);
 
@@ -123,12 +129,11 @@ namespace KooliProjekt.IntegrationTests.POST
             using var response = await _client.PostAsync("/Categories/Create", content);
 
             // Assert
-            response.EnsureSuccessStatusCode(); // Ensure the response status code is successful
-
-            var responseString = await response.Content.ReadAsStringAsync();
-            Assert.Contains("The Title field is required.", responseString); // Check for validation message
-
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode); // Ensure the response status code is 400 (Bad Request)
             Assert.False(_context.Categories.Any()); // Ensure no categories were saved
         }
+
+
+
     }
 }

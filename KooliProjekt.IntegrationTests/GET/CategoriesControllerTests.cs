@@ -58,7 +58,7 @@ namespace KooliProjekt.IntegrationTests
         public async Task Details_should_return_success_when_category_exists()
         {
             // Arrange
-            var category = new Category { Name = "Test Category" };
+            var category = new Category { Name = "Test Category", Title = "Test Title" };
             _context.Categories.Add(category);
             _context.SaveChanges();
 

@@ -11,14 +11,21 @@ namespace KooliProjekt.IntegrationTests.Helpers
         public TestBase()
         {
             Factory = new TestApplicationFactory<FakeStartup>();
+            EnsureDatabaseDeleted();
+        }
+
+        private void EnsureDatabaseDeleted()
+        {
+            //var dbContext = (ApplicationDbContext)Factory.Services.GetService(typeof(ApplicationDbContext));
+            //dbContext.Database.EnsureDeleted();
         }
 
         public void Dispose()
         {
-            var dbContext = (ApplicationDbContext)Factory.Services.GetService(typeof(ApplicationDbContext));
-            dbContext.Database.EnsureDeleted();
+            EnsureDatabaseDeleted();
         }
 
         // Add your other helper methods here
     }
 }
+

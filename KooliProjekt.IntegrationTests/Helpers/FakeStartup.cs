@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 
 namespace KooliProjekt.IntegrationTests.Helpers
@@ -44,7 +45,19 @@ namespace KooliProjekt.IntegrationTests.Helpers
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -54,9 +67,8 @@ namespace KooliProjekt.IntegrationTests.Helpers
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}/{pathStr?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-
             var serviceScopeFactory = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
             using (var serviceScope = serviceScopeFactory.CreateScope())
             {
@@ -66,7 +78,8 @@ namespace KooliProjekt.IntegrationTests.Helpers
                     throw new NullReferenceException("Cannot get instance of dbContext");
                 }
 
-                if (dbContext.Database.GetDbConnection().ConnectionString.ToLower().Contains("my.db"))
+                var connectionString = dbContext.Database.GetDbConnection().ConnectionString;
+                if (!connectionString.Contains("aspnet-KooliProjekt-Integration"))
                 {
                     throw new Exception("LIVE SETTINGS IN TESTS!");
                 }
