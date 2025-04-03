@@ -1,8 +1,9 @@
-﻿using System.Net.Http;
+﻿using KooliProjekt.WpfApp.Api;
+using System.Net.Http;
 using System.Net.Http.Json;
-using WpfApp1.Api;
+using System.Threading.Tasks;
 
-namespace KooliProjekt.WpfApp.Api
+namespace WpfApp1.Api
 {
     public class ApiClient : IApiClient
     {
@@ -14,38 +15,59 @@ namespace KooliProjekt.WpfApp.Api
             _httpClient.BaseAddress = new Uri("https://localhost:7136/api/");
         }
 
-        public async Task<List<Product>> List()
+        public async Task<Result<List<Product>>> List()
         {
-            var result = new List<Product>();
+            var result = new Result<List<Product>>();
 
             try
             {
-                result = await _httpClient.GetFromJsonAsync<List<Product>>("Product");
+                result.Value = await _httpClient.GetFromJsonAsync<List<Product>>("Products");
             }
             catch (Exception ex)
             {
-                // Handle the error appropriately
-                throw new Exception("Error fetching product list", ex);
+                result.Error = ex.Message;
             }
 
             return result;
         }
 
-        public async Task Save(Product product)
+        public async Task<Result> Save(Product product)
         {
-            if (product.Id == 0)
+            var result = new Result();
+
+            try
             {
-                await _httpClient.PostAsJsonAsync("Products", product);
+                if (product.Id == 0)
+                {
+                    await _httpClient.PostAsJsonAsync("Products", product);
+                }
+                else
+                {
+                    await _httpClient.PutAsJsonAsync("Products/" + product.Id, product);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await _httpClient.PutAsJsonAsync("Products/" + product.Id, product);
+                result.Error = ex.Message;
             }
+
+            return result;
         }
 
-        public async Task Delete(int id)
+        public async Task<Result> Delete(int id)
         {
-            await _httpClient.DeleteAsync("Products/" + id);
+            var result = new Result();
+
+            try
+            {
+                await _httpClient.DeleteAsync("Products/" + id);
+            }
+            catch (Exception ex)
+            {
+                result.Error = ex.Message;
+            }
+
+            return result;
         }
     }
 }
