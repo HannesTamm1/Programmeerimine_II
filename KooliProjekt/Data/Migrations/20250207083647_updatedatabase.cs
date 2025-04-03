@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations.Operations;
 namespace KooliProjekt.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class updatedatabase : Migration
+    public partial class UpdateDatabase : Migration
     {
         public override IModel TargetModel => base.TargetModel;
 

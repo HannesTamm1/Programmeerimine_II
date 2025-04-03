@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using KooliProjekt.Controllers;
 using KooliProjekt.Data;
+using KooliProjekt.Models;
+using KooliProjekt.Search;
 using KooliProjekt.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -25,19 +27,24 @@ namespace KooliProjekt.UnitTests.ControllerTests
         {
             // Arrange
             int page = 1;
+            var search = new OrderSearch();
             var data = new List<Order>
-            {
-                new Order { Id = 1, Title = "Product 1", Status = "" },
-                new Order { Id = 2, Title = "Product 2", Status = "" }
-            };
+    {
+        new Order { Id = 1, Title = "Product 1", Status = "" },
+        new Order { Id = 2, Title = "Product 2", Status = "" }
+    };
             var pagedResult = new PagedResult<Order> { Results = data };
-            _orderServiceMock.Setup(x => x.List(page, It.IsAny<int>())).ReturnsAsync(pagedResult);
+            _orderServiceMock.Setup(x => x.List(page, It.IsAny<int>(), search)).ReturnsAsync(pagedResult);
+
             // Act
-            var result = await _controller.Index(page) as ViewResult;
+            var result = await _controller.Index(search, page) as ViewResult;
 
             // Assert
             Assert.NotNull(result);
-            Assert.Equal(pagedResult, result.Model);
+            var model = result.Model as OrdersIndexModel;
+            Assert.NotNull(model);
+            Assert.Equal(pagedResult, model.Data);
+            Assert.Equal(search, model.Search);
         }
         [Fact]
         public async Task Details_Should_Return_NotFound_When_Id_Is_Missing()

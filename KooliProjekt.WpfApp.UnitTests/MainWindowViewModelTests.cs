@@ -41,7 +41,7 @@ namespace WpfApp1.Tests
             _viewModel.SelectedItem = product;
 
             // Act
-             ((RelayCommand<Product>)_viewModel.SaveCommand).Execute(null);
+            await Task.Run(() => ((RelayCommand<Product>)_viewModel.SaveCommand).Execute(null));
 
             // Assert
             _apiClientMock.Verify(api => api.Save(product), Times.Once);
@@ -59,7 +59,7 @@ namespace WpfApp1.Tests
             _viewModel.ConfirmDelete = p => true;
 
             // Act
-             ((RelayCommand<Product>)_viewModel.DeleteCommand).Execute(null);
+            await Task.Run(() => ((RelayCommand<Product>)_viewModel.DeleteCommand).Execute(null));
 
             // Assert
             _apiClientMock.Verify(api => api.Delete(product.Id), Times.Once);

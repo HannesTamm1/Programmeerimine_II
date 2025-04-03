@@ -38,15 +38,14 @@ namespace KooliProjekt.UnitTests.ServiceTests
         {
             // Arrange
             var service = new CategoryService(DbContext);
-            var category = new Category { Id = 1, Title = "Test" };
+            var category = new Category { Id = 1, Title = "Test", Name = "Test Category" };
             DbContext.Categories.Add(category);
             await DbContext.SaveChangesAsync();
-
 
             var categoryId = category.Id;
 
             // Act
-            await service.Delete(categoryId);  // ✅ Use actual ID
+            await service.Delete(categoryId);
 
             // Assert
             var count = DbContext.Categories.Count();

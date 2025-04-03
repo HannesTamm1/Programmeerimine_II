@@ -5,7 +5,7 @@
 namespace KooliProjekt.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class TestMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
