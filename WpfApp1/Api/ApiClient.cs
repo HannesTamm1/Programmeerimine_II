@@ -30,7 +30,6 @@ namespace WpfApp1.Api
 
             return result;
         }
-
         public async Task<Result> Save(Product product)
         {
             var result = new Result();
@@ -46,6 +45,7 @@ namespace WpfApp1.Api
                     await _httpClient.PutAsJsonAsync("Products/" + product.Id, product);
                 }
             }
+
             catch (Exception ex)
             {
                 result.Error = ex.Message;

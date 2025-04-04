@@ -79,8 +79,14 @@ namespace WpfApp1
         {
             Lists.Clear();
 
-            var lists = await _apiClient.List();
-            foreach (var list in lists)
+            var result = await _apiClient.List();
+            if (result.HasError)
+            {
+                // Handle error
+                return;
+            }
+
+            foreach (var list in result.Value)
             {
                 Lists.Add(list);
             }

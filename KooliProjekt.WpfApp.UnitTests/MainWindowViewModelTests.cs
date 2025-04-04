@@ -1,3 +1,4 @@
+using KooliProjekt.WpfApp.Api;
 using Moq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -72,11 +73,11 @@ namespace WpfApp1.Tests
         {
             // Arrange
             var products = new List<Product>
-            {
-                new Product { Id = 1, Name = "Product 1" },
-                new Product { Id = 2, Name = "Product 2" }
-            };
-            _apiClientMock.Setup(api => api.List()).ReturnsAsync(products);
+                    {
+                        new Product { Id = 1, Name = "Product 1" },
+                        new Product { Id = 2, Name = "Product 2" }
+                    };
+            _apiClientMock.Setup(api => api.List()).ReturnsAsync(new Result<List<Product>> { Value = products });
 
             // Act
             await _viewModel.Load();
