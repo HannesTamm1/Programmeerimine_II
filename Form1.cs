@@ -74,10 +74,10 @@ namespace KooliProjekt.WinFormsApp
     }
     public class ProductPresenter
     {
-        private readonly KooliProjekt.WinFormsApp.Api.IApiClient _apiClient;
+        private readonly IApiClient _apiClient;
         private readonly IProductView _view;
 
-        public ProductPresenter(KooliProjekt.WinFormsApp.Api.IApiClient apiClient, IProductView view)
+        public ProductPresenter(IApiClient apiClient, IProductView view)
         {
             _apiClient = apiClient;
             _view = view;
@@ -90,18 +90,18 @@ namespace KooliProjekt.WinFormsApp
 
         public async Task Load()
         {
-            var products = await _apiClient.GetProductsAsync();
+            var products = await _apiClient.List();
             _view.Products = products;
         }
 
         public async Task Delete(int productId)
         {
-            await _apiClient.DeleteProductAsync(productId);
+            await _apiClient.Delete(productId);
         }
 
         internal async Task Save(Product product)
         {
-            await _apiClient.SaveProductAsync(product);
+            await _apiClient.Save(product);
         }
     }
 }
