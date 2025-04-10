@@ -23,7 +23,7 @@
             <TextBlock>ID</TextBlock>
             <TextBlock Text="{Binding SelectedItem.Id}"></TextBlock>
             <TextBlock>Title</TextBlock>
-            <TextBox Text="{Binding SelectedItem.Name}"></TextBox>
+            <TextBox Text="{Binding SelectedItem.Name}" TextChanged="TextBox_TextChanged"></TextBox>
             <StackPanel 
             HorizontalAlignment="Center"
             Orientation="Horizontal" 
