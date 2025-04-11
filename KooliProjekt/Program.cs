@@ -15,6 +15,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderProductService, OrderProductService>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddCors();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -29,6 +30,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+app.UseCors(
+       options => options.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+);
 app.UseRouting();
 app.MapControllerRoute(
     name: "default",
