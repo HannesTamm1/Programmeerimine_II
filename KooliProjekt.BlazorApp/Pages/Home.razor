@@ -1,14 +1,10 @@
 ﻿@page "/"
 
-@using System.Net.Http
-@using System.Net.Http.Json
-@inject HttpClient Http
+<PageTitle>Todo lists</PageTitle>
 
-<PageTitle>Home</PageTitle>
+<h1>Todo lists</h1>
 
-<h1>Hello, world!</h1>
-
-<p>Welcome to your new app.</p>
+<p>This component demonstrates fetching data from the server.</p>
 
 @if (data == null)
 {
@@ -16,19 +12,27 @@
 }
 else
 {
-    <ul>
-        @foreach (var item in data)
-        {
-            <li>@item</li>
-        }
-    </ul>
-}
-
-@code {
-    private List<string> data;
-
-    protected override async Task OnInitializedAsync()
-    {
-        data = await Http.GetFromJsonAsync<List<string>>("https://localhost:7136/api/");
-    }
+    <p><a class="btn btn-primary" href="/create">Add new</a></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var todoList in todoLists)
+            {
+                <tr>
+                    <td>@todoList.Id</td>
+                    <td>@todoList.Title</td>
+                    <td>
+                        <a href="/edit/@todoList.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-primary" @onclick="() => Delete(todoList.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

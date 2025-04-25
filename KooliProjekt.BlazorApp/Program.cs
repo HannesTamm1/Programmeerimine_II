@@ -11,7 +11,8 @@ namespace KooliProjekt.BlazorApp
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7136/api/") });
+            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(Hos) });
+            builder.Services.AddScoped<IApiClient, ApiClient>();
 
             await builder.Build().RunAsync();
         }

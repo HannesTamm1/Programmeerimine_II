@@ -17,7 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KooliProjekt.WinFormsApp", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KooliProjekt.WinForm.UnitTests", "WinForm.UnitTests\KooliProjekt.WinForm.UnitTests.csproj", "{093127F4-6686-435D-8173-C950E9978258}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KooliProjekt.BlazorApp", "KooliProjekt.BlazorApp\KooliProjekt.BlazorApp.csproj", "{D111AEF3-DC21-40D2-B871-A9D1B535DA3B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KooliProjekt.PublicAPI", "PublicApi\KooliProjekt.PublicAPI.csproj", "{5B8F2E3B-71CC-49F4-9BA0-5F0C7F341CCE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KooliProjekt.BlazorApp", "..\..\..\Documents\KooliProjekt.BlazorApp\KooliProjekt.BlazorApp.csproj", "{2F29CB9A-516B-47B0-8D1E-D6AEDBCAC3DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +55,14 @@ Global
 		{093127F4-6686-435D-8173-C950E9978258}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{093127F4-6686-435D-8173-C950E9978258}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{093127F4-6686-435D-8173-C950E9978258}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D111AEF3-DC21-40D2-B871-A9D1B535DA3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D111AEF3-DC21-40D2-B871-A9D1B535DA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D111AEF3-DC21-40D2-B871-A9D1B535DA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D111AEF3-DC21-40D2-B871-A9D1B535DA3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B8F2E3B-71CC-49F4-9BA0-5F0C7F341CCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B8F2E3B-71CC-49F4-9BA0-5F0C7F341CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B8F2E3B-71CC-49F4-9BA0-5F0C7F341CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B8F2E3B-71CC-49F4-9BA0-5F0C7F341CCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F29CB9A-516B-47B0-8D1E-D6AEDBCAC3DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F29CB9A-516B-47B0-8D1E-D6AEDBCAC3DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F29CB9A-516B-47B0-8D1E-D6AEDBCAC3DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F29CB9A-516B-47B0-8D1E-D6AEDBCAC3DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
