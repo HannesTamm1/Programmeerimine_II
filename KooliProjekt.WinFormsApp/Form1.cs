@@ -1,4 +1,4 @@
-using KooliProjekt.WinFormsApp.Api;
+using KooliProjekt.PublicAPI.Api;
 using System;
 using System.Windows.Forms;
 

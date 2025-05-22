@@ -1,4 +1,4 @@
-using KooliProjekt.PublicAPI.Api;
+﻿using KooliProjekt.PublicAPI.Api;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -7,7 +7,7 @@ namespace KooliProjekt.BlazorApp.Pages
     public partial class Home
     {
         [Inject]
-        protected IApiClient ApiClient { get; set; }
+        protected IApiClient apiClient { get; set; }
 
         [Inject]
         protected IJSRuntime JsRuntime { get; set; }
@@ -19,7 +19,7 @@ namespace KooliProjekt.BlazorApp.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            var result = await this.ApiClient.List(); // Explicitly use 'this' to resolve ambiguity  
+            var result = await apiClient.List();
 
             products = result.Value;
         }
@@ -27,12 +27,12 @@ namespace KooliProjekt.BlazorApp.Pages
         protected async Task Delete(int id)
         {
             bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
-            if (!confirmed)
+            if(!confirmed)
             {
                 return;
             }
 
-            await this.ApiClient.Delete(id); // Explicitly use 'this' to resolve ambiguity  
+            await apiClient.Delete(id);
 
             NavManager.Refresh();
         }

@@ -1,12 +1,12 @@
 ﻿@page "/"
 
-<PageTitle>Todo lists</PageTitle>
+<PageTitle>Products</PageTitle>
 
-<h1>Todo lists</h1>
+<h1>Producsts</h1>
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (data == null)
+@if (products == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -22,14 +22,14 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var todoList in todoLists)
+            @foreach (var products in products)
             {
                 <tr>
-                    <td>@todoList.Id</td>
-                    <td>@todoList.Title</td>
+                    <td>@products.Id</td>
+                    <td>@products.Name</td>
                     <td>
-                        <a href="/edit/@todoList.Id" class="btn btn-primary">Edit</a>
-                        <button class="btn btn-primary" @onclick="() => Delete(todoList.Id)">Delete</button>
+                        <a href="/edit/@products.Id" class="btn btn-primary">Edit</a>
+                        <button class="btn btn-primary" @onclick="() => Delete(products.Id)">Delete</button>
                     </td>
                 </tr>
             }

@@ -18,9 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Downloads\KooliProjekt.WinFormsApp\KooliProjekt.WinFormsApp\KooliProjekt.WinFormsApp.csproj" />
-    <ProjectReference Include="..\KooliProjekt.UnitTests\KooliProjekt.UnitTests.csproj" />
-    <ProjectReference Include="..\KooliProjekt\KooliProjekt.csproj" />
+    <ProjectReference Include="..\KooliProjekt.WinFormsApp\KooliProjekt.WinFormsApp.csproj" />
   </ItemGroup>
 
   <ItemGroup>
