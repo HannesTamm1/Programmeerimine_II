@@ -1,10 +1,9 @@
-using KooliProjekt.WpfApp.Api;
+using KooliProjekt.PublicAPI.Api;
 using Moq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfApp1;
-using WpfApp1.Api;
 using Xunit;
 
 namespace WpfApp1.Tests

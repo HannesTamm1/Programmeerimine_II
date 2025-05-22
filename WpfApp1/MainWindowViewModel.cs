@@ -1,10 +1,9 @@
-﻿using KooliProjekt.WpfApp.Api;
+﻿using KooliProjekt.PublicAPI.Api;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
 using System.Xml.Linq;
 using WpfApp1;
-using WpfApp1.Api;
 
 namespace WpfApp1
 {

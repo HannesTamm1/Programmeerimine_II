@@ -12,31 +12,51 @@ namespace KooliProjekt.PublicAPI.Api
 
         public ApiClient()
         {
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:7136/api/")
-            };
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri("https://localhost:7136/api/");
         }
 
         public async Task<Result<List<Product>>> List()
         {
-            var result = new Result<List<Product>> { Value = new List<Product>() };
+            var result = new Result<List<Product>>();
 
             try
             {
-                var products = await _httpClient.GetFromJsonAsync<List<Product>>("Products");
-                result.Value = products ?? new List<Product>();
-            }
-            catch (HttpRequestException)
-            {
-                result.Error = "Ei saa serveriga ühendust. Palun proovi hiljem uuesti.";
+                result.Value = await _httpClient.GetFromJsonAsync<List<Product>>("Products");
             }
             catch (Exception ex)
             {
-                result.Error = ex.Message;
+                result.AddError("_", ex.Message);
             }
 
             return result;
+        }
+
+        public async Task<Result> Save(Product list)
+        {
+            HttpResponseMessage response;
+
+            if (list.Id == 0)
+            {
+                response = await _httpClient.PostAsJsonAsync("Products", list);
+            }
+            else
+            {
+                response = await _httpClient.PutAsJsonAsync("Products/" + list.Id, list);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<Result>();
+                return result;
+            }
+
+            return new Result();
+        }
+
+        public async Task Delete(int id)
+        {
+            await _httpClient.DeleteAsync("Products/" + id);
         }
 
         public async Task<Result<Product>> Get(int id)
@@ -45,36 +65,34 @@ namespace KooliProjekt.PublicAPI.Api
 
             try
             {
-                var product = await _httpClient.GetFromJsonAsync<Product>($"Products/{id}");
-                result.Value = product;
-            }
-            catch (HttpRequestException)
-            {
-                result.Error = "Ei saa serveriga ühendust. Palun proovi hiljem uuesti.";
+                result.Value = await _httpClient.GetFromJsonAsync<Product>("Products/" + id);
             }
             catch (Exception ex)
             {
-                result.Error = ex.Message;
+                result.AddError("_", ex.Message);
             }
 
             return result;
         }
 
-        public async Task Save(Product product)
+        Task<Result<List<Product>>> IApiClient.List()
         {
-            if (product.Id == 0)
-            {
-                await _httpClient.PostAsJsonAsync("Products", product);
-            }
-            else
-            {
-                await _httpClient.PutAsJsonAsync($"Products/{product.Id}", product);
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task Delete(int id)
+        Task<Result<Product>> IApiClient.Save(Product product)
         {
-            await _httpClient.DeleteAsync($"Products/{id}");
+            throw new NotImplementedException();
+        }
+
+        Task<Result> IApiClient.Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Result<Product>> IApiClient.Get(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
