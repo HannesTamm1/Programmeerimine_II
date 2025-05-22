@@ -1,5 +1,5 @@
 using KooliProjekt.WinFormsApp;
-using KooliProjekt.WinFormsApp.Api;
+using KooliProjekt.PublicAPI.Api;
 using Moq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -35,13 +35,13 @@ namespace KooliProjekt.WinFormsApp.Tests
         public void UpdateView_ShouldSetViewProperties_WhenProductIsNotNull()
         {
             // Arrange
-            var product = new Product { Id = 42, Title = "Test Product" };
+            var product = new Product { Id = 42, Name = "Test Product" };
 
             // Act
             _presenter.UpdateView(product);
 
             // Assert
-            _productViewMock.VerifySet(v => v.Title = product.Title);
+            _productViewMock.VerifySet(v => v.Title = product.Name);
             _productViewMock.VerifySet(v => v.Id = product.Id);
         }
 
@@ -51,8 +51,8 @@ namespace KooliProjekt.WinFormsApp.Tests
             // Arrange
             var products = new List<Product>
             {
-                new Product { Id = 1, Title = "Product A" },
-                new Product { Id = 2, Title = "Product B" }
+                new Product { Id = 1, Name = "Product A" },
+                new Product { Id = 2, Name = "Product B" }
             };
 
             _apiClientMock
@@ -83,7 +83,7 @@ namespace KooliProjekt.WinFormsApp.Tests
         public async Task Save_ShouldCallApiClientSave()
         {
             // Arrange
-            var product = new Product { Id = 3, Title = "To Be Saved" };
+            var product = new Product { Id = 3, Name = "To Be Saved" };
 
             // Act
             await _presenter.Save(product);
