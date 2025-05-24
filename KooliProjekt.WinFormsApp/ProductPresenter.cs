@@ -1,51 +1,40 @@
 ﻿using KooliProjekt.PublicAPI.Api;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace KooliProjekt.WinFormsApp
 {
     public class ProductPresenter
     {
-        public readonly IApiClient _apiClient;
-        public readonly IProductView _productView;
+        private readonly IApiClient _apiClient;
+        private readonly IProductView _productView;
 
-        public ProductPresenter(IProductView view, IApiClient apiClient)
+        public ProductPresenter(IProductView productView, IApiClient apiClient)
         {
-            _productView = view ?? throw new ArgumentNullException(nameof(view));
-            _apiClient = apiClient ?? throw new ArgumentNullException(nameof(apiClient));
+            _apiClient = apiClient;
+            _productView = productView;
+
+            productView.Presenter = this;
         }
 
-        public void UpdateView(Product product)
+        public void UpdateView(Product list)
         {
-            if (product == null)
+            if (list == null)
             {
-                _productView.Title = string.Empty;
+                _productView.Name = string.Empty;
                 _productView.Id = 0;
             }
             else
             {
-                _productView.Title = product.Name;
-                _productView.Id = product.Id;
+                _productView.Id = list.Id;
+                _productView.Name = list.Name;
             }
         }
 
         public async Task Load()
         {
-            var response = await _apiClient.List();
-            _productView.Products = response.Value;
-        }
+            var product = await _apiClient.List();
 
-        public async Task Delete(int productId)
-        {
-            await _apiClient.Delete(productId);
-        }
-
-        public async Task Save(Product product)
-        {
-            await _apiClient.Save(product);
+            _productView.Products = Product.Value;
         }
     }
 }

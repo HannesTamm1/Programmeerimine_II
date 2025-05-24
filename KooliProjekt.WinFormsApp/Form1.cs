@@ -1,107 +1,98 @@
+using KooliProjekt.PublicAPI;
 using KooliProjekt.PublicAPI.Api;
-using System;
-using System.Windows.Forms;
 
 namespace KooliProjekt.WinFormsApp
 {
     public partial class Form1 : Form, IProductView
     {
-        private ProductPresenter _presenter;
-
-        public Form1(ProductPresenter presenter)
-        {
-            InitializeComponent();
-            _presenter = presenter;
-            _presenter.Load().Wait(); // Modified this line
-        }
-
         public IList<Product> Products
         {
-            get => (IList<Product>)TodoListsGrid.DataSource;
-            set => TodoListsGrid.DataSource = value;
-        }
-
-        public Product SelectedItem
-        {
-            get => (Product)TodoListsGrid.CurrentRow?.DataBoundItem;
+            get
+            {
+                return (IList<Product>)ProductsGrid.DataSource;
+            }
             set
             {
-                if (value != null)
-                {
-                    IdField.Text = value.Id.ToString();
-                    TitleField.Text = value.Title;
-                }
+                ProductsGrid.DataSource = value;
             }
         }
 
+        public Product SelectedItem { get; set; }
+
+        public ProductPresenter Presenter { get; set; }
+
         public string Title
         {
-            get => TitleField.Text;
-            set => TitleField.Text = value;
+            get
+            {
+                return TitleField.Text; ;
+            }
+            set
+            {
+                TitleField.Text = value;
+            }
         }
 
         public int Id
         {
-            get => int.Parse(IdField.Text);
-            set => IdField.Text = value.ToString();
-        }
-
-        public ProductPresenter Presenter
-        {
-            get => _presenter;
-            set => _presenter = value;
-        }
-
-        private void NewButton_Click(object sender, EventArgs e)
-        {
-            _presenter.UpdateView(new Product { Title = "New Product" });
-        }
-
-        private async void SaveButton_Click(object sender, EventArgs e)
-        {
-            var product = new Product { Id = Id, Title = Title };
-            await _presenter.Save(product);
-        }
-
-        private async void DeleteButton_Click(object sender, EventArgs e)
-        {
-            var product = SelectedItem;
-            if (product != null)
+            get
             {
-                await _presenter.Delete(product.Id);
+                return int.Parse(IdField.Text);
+            }
+            set
+            {
+                IdField.Text = value.ToString();
             }
         }
-    }
-    public class ProductPresenter
-    {
-        private readonly IApiClient _apiClient;
-        private readonly IProductView _view;
 
-        public ProductPresenter(IApiClient apiClient, IProductView view)
+        public Form1()
         {
-            _apiClient = apiClient;
-            _view = view;
+            InitializeComponent();
+
+            ProductsGrid.AutoGenerateColumns = true;
+            ProductsGrid.SelectionChanged += ProductsGrid_SelectionChanged;
+
+            AddButton.Click += AddButton_Click;
+            SaveButton.Click += SaveButton_Click;
+            DeleteButton.Click += DeleteButton_Click;
+
+            Load += Form1_Load;
         }
 
-        public void UpdateView(Product product)
+        private void DeleteButton_Click(object? sender, EventArgs e)
         {
-            // Implementation
+            // Kutsu presenteri Delete meetodi
+            // Lae andmed uuesti
         }
 
-        public async Task Load()
+        private void SaveButton_Click(object? sender, EventArgs e)
         {
-            var products = await _apiClient.List();
-            _view.Products = products;
+            // Kutsu presenteri Save meetodi
+            // Lae andmed uuesti
         }
 
-        public async Task Delete(int productId)
+        private void AddButton_Click(object? sender, EventArgs e)
         {
-            await _apiClient.Delete(productId);
+            // Kutsu presenteri UpdateView meetodi
         }
 
-        internal async Task Save(Product product)
+        private void ProductsGrid_SelectionChanged(object? sender, EventArgs e)
         {
-            await _apiClient.Save(product);
+            if (ProductsGrid.SelectedRows.Count == 0)
+            {
+                SelectedItem = null;
+            }
+            else
+            {
+                SelectedItem = (Product)ProductsGrid.SelectedRows[0].DataBoundItem;
+            }
+
+            Presenter.UpdateView(SelectedItem);
+        }
+
+        private async void Form1_Load(object? sender, EventArgs e)
+        {
+            await Presenter.Load();
         }
     }
 }
