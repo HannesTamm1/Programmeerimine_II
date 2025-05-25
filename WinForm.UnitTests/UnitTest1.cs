@@ -17,6 +17,10 @@ namespace KooliProjekt.WinFormsApp.Tests
         {
             _apiClientMock = new Mock<IApiClient>();
             _productViewMock = new Mock<IProductView>();
+
+            // Setup Products property for Load
+            _productViewMock.SetupProperty(v => v.Products);
+
             _presenter = new ProductPresenter(_productViewMock.Object, _apiClientMock.Object);
         }
 
@@ -24,11 +28,11 @@ namespace KooliProjekt.WinFormsApp.Tests
         public void UpdateView_ShouldClearView_WhenProductIsNull()
         {
             // Act
-            _presenter.UpdateView(null!); // Use null-forgiving operator to suppress the warning
+            _presenter.UpdateView(null!);
 
             // Assert
-            _productViewMock.VerifySet(v => v.Title = string.Empty);
-            _productViewMock.VerifySet(v => v.Id = 0);
+            _productViewMock.VerifySet(v => v.Name = string.Empty, Times.Once);
+            _productViewMock.VerifySet(v => v.Id = 0, Times.Once);
         }
 
         [Fact]
@@ -41,8 +45,8 @@ namespace KooliProjekt.WinFormsApp.Tests
             _presenter.UpdateView(product);
 
             // Assert
-            _productViewMock.VerifySet(v => v.Title = product.Name);
-            _productViewMock.VerifySet(v => v.Id = product.Id);
+            _productViewMock.VerifySet(v => v.Name = product.Name, Times.Once);
+            _productViewMock.VerifySet(v => v.Id = product.Id, Times.Once);
         }
 
         [Fact]
@@ -67,29 +71,37 @@ namespace KooliProjekt.WinFormsApp.Tests
         }
 
         [Fact]
-        public async Task Delete_ShouldCallApiClientDelete()
+        public async Task Delete_ShouldCallApiClientDelete_AndLoad()
         {
             // Arrange
             int productId = 99;
+            _apiClientMock.Setup(api => api.Delete(productId)).ReturnsAsync(new Result());
+            _apiClientMock.Setup(api => api.List()).ReturnsAsync(new Result<List<Product>> { Value = new List<Product>() });
 
             // Act
             await _presenter.Delete(productId);
 
             // Assert
             _apiClientMock.Verify(api => api.Delete(productId), Times.Once);
+            _apiClientMock.Verify(api => api.List(), Times.Once);
+            _productViewMock.VerifySet(v => v.Products = It.IsAny<IList<Product>>(), Times.Once);
         }
 
         [Fact]
-        public async Task Save_ShouldCallApiClientSave()
+        public async Task Save_ShouldCallApiClientSave_AndLoad()
         {
             // Arrange
             var product = new Product { Id = 3, Name = "To Be Saved" };
+            _apiClientMock.Setup(api => api.Save(product)).ReturnsAsync(new Result<Product>());
+            _apiClientMock.Setup(api => api.List()).ReturnsAsync(new Result<List<Product>> { Value = new List<Product>() });
 
             // Act
             await _presenter.Save(product);
 
             // Assert
             _apiClientMock.Verify(api => api.Save(product), Times.Once);
+            _apiClientMock.Verify(api => api.List(), Times.Once);
+            _productViewMock.VerifySet(v => v.Products = It.IsAny<IList<Product>>(), Times.Once);
         }
     }
 }

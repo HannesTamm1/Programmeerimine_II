@@ -7,20 +7,20 @@ namespace KooliProjekt.WinFormsApp
     {
         public IList<Product> Products
         {
-            get { return (IList<Product>)TodoListsGrid.DataSource; }
-            set { TodoListsGrid.DataSource = value; }
+            get { return (IList<Product>)ProductsGrid.DataSource; }
+            set { ProductsGrid.DataSource = value; }
         }
 
         public Product SelectedItem // Removed nullable annotation to match the interface
         {
-            get => TodoListsGrid.SelectedRows.Count > 0
-                ? (Product)TodoListsGrid.SelectedRows[0].DataBoundItem
+            get => ProductsGrid.SelectedRows.Count > 0
+                ? (Product)ProductsGrid.SelectedRows[0].DataBoundItem
                 : new Product(); // Return a default Product instance instead of null
             set
             {
                 if (value != null)
                 {
-                    foreach (DataGridViewRow row in TodoListsGrid.Rows)
+                    foreach (DataGridViewRow row in ProductsGrid.Rows)
                     {
                         if (row.DataBoundItem == value)
                         {
@@ -56,8 +56,8 @@ namespace KooliProjekt.WinFormsApp
         {
             InitializeComponent();
 
-            TodoListsGrid.AutoGenerateColumns = true;
-            TodoListsGrid.SelectionChanged += TodoListsGrid_SelectionChanged;
+            ProductsGrid.AutoGenerateColumns = true;
+            ProductsGrid.SelectionChanged += TodoListsGrid_SelectionChanged;
 
             NewButton.Click += NewButton_Click;
             SaveButton.Click += SaveButton_Click;
@@ -91,14 +91,14 @@ namespace KooliProjekt.WinFormsApp
 
         private void TodoListsGrid_SelectionChanged(object? sender, EventArgs e)
         {
-            if (TodoListsGrid.SelectedRows.Count == 0)
+            if (ProductsGrid.SelectedRows.Count == 0)
             {
                 // Assign a default Product instance instead of null to fix CS8625
                 SelectedItem = new Product { Id = 0, Name = string.Empty };
             }
             else
             {
-                SelectedItem = (Product)TodoListsGrid.SelectedRows[0].DataBoundItem;
+                SelectedItem = (Product)ProductsGrid.SelectedRows[0].DataBoundItem;
             }
 
             if (SelectedItem != null)

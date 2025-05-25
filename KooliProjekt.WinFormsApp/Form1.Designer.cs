@@ -3,7 +3,7 @@
     partial class Form1
     {
         private System.ComponentModel.IContainer components = null;
-        private System.Windows.Forms.DataGridView TodoListsGrid;
+        private System.Windows.Forms.DataGridView ProductsGrid;
         private System.Windows.Forms.Button NewButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button DeleteButton;
@@ -21,22 +21,22 @@
 
         private void InitializeComponent()
         {
-            this.TodoListsGrid = new System.Windows.Forms.DataGridView();
+            this.ProductsGrid = new System.Windows.Forms.DataGridView();
             this.NewButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.DeleteButton = new System.Windows.Forms.Button();
             this.IdField = new System.Windows.Forms.TextBox();
             this.TitleField = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.TodoListsGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ProductsGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // TodoListsGrid
             // 
-            this.TodoListsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.TodoListsGrid.Location = new System.Drawing.Point(12, 12);
-            this.TodoListsGrid.Name = "TodoListsGrid";
-            this.TodoListsGrid.Size = new System.Drawing.Size(776, 150);
-            this.TodoListsGrid.TabIndex = 0;
+            this.ProductsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ProductsGrid.Location = new System.Drawing.Point(12, 12);
+            this.ProductsGrid.Name = "TodoListsGrid";
+            this.ProductsGrid.Size = new System.Drawing.Size(776, 150);
+            this.ProductsGrid.TabIndex = 0;
             // 
             // NewButton
             // 
@@ -90,11 +90,11 @@
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.NewButton);
-            this.Controls.Add(this.TodoListsGrid);
+            this.Controls.Add(this.ProductsGrid);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.TodoListsGrid)).EndInit();
-            this.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ProductsGrid)).EndInit();
+            this.ResumeLayout(false);       
             this.PerformLayout();
         }
     }
