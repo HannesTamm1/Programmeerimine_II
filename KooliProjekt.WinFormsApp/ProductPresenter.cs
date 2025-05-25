@@ -25,14 +25,27 @@ namespace KooliProjekt.WinFormsApp
             else
             {
                 _productView.Id = product.Id;
-                _productView.Name = product.Name;
+                _productView.Name = product.Name ?? string.Empty; // Ensure null-safe assignment
             }
         }
 
         public async Task Load()
         {
             var productsResult = await _apiClient.List();
-            _productView.Products = productsResult.Value; 
+            _productView.Products = productsResult.Value;
+        }
+
+        // --- Lisa need meetodid ---
+        public async Task Delete(int productId)
+        {
+            await _apiClient.Delete(productId);
+            await Load();
+        }
+
+        public async Task Save(Product product)
+        {
+            await _apiClient.Save(product);
+            await Load();
         }
     }
 }

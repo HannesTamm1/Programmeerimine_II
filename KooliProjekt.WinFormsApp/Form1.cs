@@ -11,8 +11,28 @@ namespace KooliProjekt.WinFormsApp
             set { TodoListsGrid.DataSource = value; }
         }
 
-        public Product SelectedItem { get; set; }
-        public ProductPresenter Presenter { get; set; }
+        public Product SelectedItem // Removed nullable annotation to match the interface
+        {
+            get => TodoListsGrid.SelectedRows.Count > 0
+                ? (Product)TodoListsGrid.SelectedRows[0].DataBoundItem
+                : new Product(); // Return a default Product instance instead of null
+            set
+            {
+                if (value != null)
+                {
+                    foreach (DataGridViewRow row in TodoListsGrid.Rows)
+                    {
+                        if (row.DataBoundItem == value)
+                        {
+                            row.Selected = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public ProductPresenter Presenter { get; set; } = null!; // Use null-forgiving operator to suppress warning
 
         public string Title
         {
@@ -20,7 +40,7 @@ namespace KooliProjekt.WinFormsApp
             set { TitleField.Text = value; }
         }
 
-        public string Name
+        public new string Name
         {
             get => TitleField.Text;
             set => TitleField.Text = value;
@@ -28,7 +48,7 @@ namespace KooliProjekt.WinFormsApp
 
         public int Id
         {
-            get { return int.Parse(IdField.Text); }
+            get { return int.TryParse(IdField.Text, out var id) ? id : 0; }
             set { IdField.Text = value.ToString(); }
         }
 
@@ -43,43 +63,54 @@ namespace KooliProjekt.WinFormsApp
             SaveButton.Click += SaveButton_Click;
             DeleteButton.Click += DeleteButton_Click;
 
-            Load += Form1_Load;
+            Load += async (s, e) => await Form1_Load(s, e);
         }
 
-        private void DeleteButton_Click(object? sender, EventArgs e)
+        private async void DeleteButton_Click(object? sender, EventArgs e)
         {
-            // Kutsu presenteri Delete meetodi
-            // Lae andmed uuesti
+            if (Presenter != null && SelectedItem != null)
+            {
+                await Presenter.Delete(SelectedItem.Id);
+            }
         }
 
-        private void SaveButton_Click(object? sender, EventArgs e)
+        private async void SaveButton_Click(object? sender, EventArgs e)
         {
-            // Kutsu presenteri Save meetodi
-            // Lae andmed uuesti
+            if (Presenter != null && SelectedItem != null)
+            {
+                await Presenter.Save(SelectedItem);
+            }
         }
 
         private void NewButton_Click(object? sender, EventArgs e)
         {
-            // Kutsu presenteri UpdateView meetodi
+            var newProduct = new Product { Id = 0, Name = "" };
+            SelectedItem = newProduct;
+            Presenter?.UpdateView(newProduct);
         }
 
         private void TodoListsGrid_SelectionChanged(object? sender, EventArgs e)
         {
             if (TodoListsGrid.SelectedRows.Count == 0)
             {
-                SelectedItem = null;
+                // Assign a default Product instance instead of null to fix CS8625
+                SelectedItem = new Product { Id = 0, Name = string.Empty };
             }
             else
             {
                 SelectedItem = (Product)TodoListsGrid.SelectedRows[0].DataBoundItem;
             }
 
-            Presenter.UpdateView(SelectedItem);
+            if (SelectedItem != null)
+            {
+                Presenter?.UpdateView(SelectedItem);
+            }
         }
 
-        private async void Form1_Load(object? sender, EventArgs e)
+        private async Task Form1_Load(object? sender, EventArgs e)
         {
-            await Presenter.Load();
+            if (Presenter != null)
+                await Presenter.Load();
         }
     }
 }

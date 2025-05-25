@@ -24,7 +24,7 @@ namespace KooliProjekt.WinFormsApp.Tests
         public void UpdateView_ShouldClearView_WhenProductIsNull()
         {
             // Act
-            _presenter.UpdateView(null);
+            _presenter.UpdateView(null!); // Use null-forgiving operator to suppress the warning
 
             // Assert
             _productViewMock.VerifySet(v => v.Title = string.Empty);

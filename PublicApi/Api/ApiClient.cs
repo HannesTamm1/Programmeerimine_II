@@ -22,7 +22,8 @@ namespace KooliProjekt.PublicAPI.Api
 
             try
             {
-                result.Value = await _httpClient.GetFromJsonAsync<List<Product>>("Products");
+                var products = await _httpClient.GetFromJsonAsync<List<Product>>("Products");
+                result.Value = products ?? new List<Product>(); // Ensure non-null assignment
             }
             catch (Exception ex)
             {
@@ -32,31 +33,73 @@ namespace KooliProjekt.PublicAPI.Api
             return result;
         }
 
-        public async Task<Result> Save(Product list)
+        public async Task<Result<Product>> Save(Product product)
         {
             HttpResponseMessage response;
+            Result<Product> result = new Result<Product>();
 
-            if (list.Id == 0)
+            if (product.Id == 0)
             {
-                response = await _httpClient.PostAsJsonAsync("Products", list);
+                response = await _httpClient.PostAsJsonAsync("Products", product);
             }
             else
             {
-                response = await _httpClient.PutAsJsonAsync("Products/" + list.Id, list);
+                response = await _httpClient.PutAsJsonAsync("Products/" + product.Id, product);
             }
+
+            if (response.IsSuccessStatusCode)
+            {
+                var productResult = await response.Content.ReadFromJsonAsync<Product>();
+                result.Value = productResult ?? new Product(); // Ensure non-null assignment
+            }
+            else
+            {
+                var errorResult = await response.Content.ReadFromJsonAsync<Result>();
+                if (errorResult != null)
+                {
+                    // Copy errors from errorResult to result
+                    foreach (var kvp in errorResult.Errors)
+                    {
+                        foreach (var msg in kvp.Value)
+                        {
+                            result.AddError(kvp.Key, msg);
+                        }
+                    }
+                }
+                else
+                {
+                    result.AddError("_", "Unknown error");
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<Result> Delete(int id)
+        {
+            var response = await _httpClient.DeleteAsync("Products/" + id);
+            var result = new Result();
 
             if (!response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<Result>();
-                return result;
+                var errorResult = await response.Content.ReadFromJsonAsync<Result>();
+                if (errorResult != null)
+                {
+                    foreach (var kvp in errorResult.Errors)
+                    {
+                        foreach (var msg in kvp.Value)
+                        {
+                            result.AddError(kvp.Key, msg);
+                        }
+                    }
+                }
+                else
+                {
+                    result.AddError("_", "Unknown error");
+                }
             }
 
-            return new Result();
-        }
-
-        public async Task Delete(int id)
-        {
-            await _httpClient.DeleteAsync("Products/" + id);
+            return result;
         }
 
         public async Task<Result<Product>> Get(int id)
@@ -65,7 +108,8 @@ namespace KooliProjekt.PublicAPI.Api
 
             try
             {
-                result.Value = await _httpClient.GetFromJsonAsync<Product>("Products/" + id);
+                var product = await _httpClient.GetFromJsonAsync<Product>("Products/" + id);
+                result.Value = product ?? new Product(); // Ensure non-null assignment
             }
             catch (Exception ex)
             {
@@ -73,26 +117,6 @@ namespace KooliProjekt.PublicAPI.Api
             }
 
             return result;
-        }
-
-        Task<Result<List<Product>>> IApiClient.List()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Result<Product>> IApiClient.Save(Product product)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Result> IApiClient.Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<Result<Product>> IApiClient.Get(int id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
