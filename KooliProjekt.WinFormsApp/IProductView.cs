@@ -12,6 +12,7 @@ namespace KooliProjekt.WinFormsApp
         IList<Product> Products { get; set; }
         Product SelectedItem { get; set; }
         string Title { get; set; }
+        string Name { get; set; }
         int Id { get; set; }
         ProductPresenter Presenter { get; set; }    
     }

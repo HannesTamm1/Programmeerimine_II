@@ -1,6 +1,5 @@
 ﻿using KooliProjekt.PublicAPI.Api;
 
-
 namespace KooliProjekt.WinFormsApp
 {
     public class ProductPresenter
@@ -16,25 +15,24 @@ namespace KooliProjekt.WinFormsApp
             productView.Presenter = this;
         }
 
-        public void UpdateView(Product list)
+        public void UpdateView(Product product)
         {
-            if (list == null)
+            if (product == null)
             {
                 _productView.Name = string.Empty;
                 _productView.Id = 0;
             }
             else
             {
-                _productView.Id = list.Id;
-                _productView.Name = list.Name;
+                _productView.Id = product.Id;
+                _productView.Name = product.Name;
             }
         }
 
         public async Task Load()
         {
-            var product = await _apiClient.List();
-
-            _productView.Products = Product.Value;
+            var productsResult = await _apiClient.List();
+            _productView.Products = productsResult.Value; 
         }
     }
 }

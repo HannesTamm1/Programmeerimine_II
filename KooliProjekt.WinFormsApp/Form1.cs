@@ -7,52 +7,39 @@ namespace KooliProjekt.WinFormsApp
     {
         public IList<Product> Products
         {
-            get
-            {
-                return (IList<Product>)ProductsGrid.DataSource;
-            }
-            set
-            {
-                ProductsGrid.DataSource = value;
-            }
+            get { return (IList<Product>)TodoListsGrid.DataSource; }
+            set { TodoListsGrid.DataSource = value; }
         }
 
         public Product SelectedItem { get; set; }
-
         public ProductPresenter Presenter { get; set; }
 
         public string Title
         {
-            get
-            {
-                return TitleField.Text; ;
-            }
-            set
-            {
-                TitleField.Text = value;
-            }
+            get { return TitleField.Text; }
+            set { TitleField.Text = value; }
+        }
+
+        public string Name
+        {
+            get => TitleField.Text;
+            set => TitleField.Text = value;
         }
 
         public int Id
         {
-            get
-            {
-                return int.Parse(IdField.Text);
-            }
-            set
-            {
-                IdField.Text = value.ToString();
-            }
+            get { return int.Parse(IdField.Text); }
+            set { IdField.Text = value.ToString(); }
         }
 
         public Form1()
         {
             InitializeComponent();
 
-            ProductsGrid.AutoGenerateColumns = true;
-            ProductsGrid.SelectionChanged += ProductsGrid_SelectionChanged;
+            TodoListsGrid.AutoGenerateColumns = true;
+            TodoListsGrid.SelectionChanged += TodoListsGrid_SelectionChanged;
 
-            AddButton.Click += AddButton_Click;
+            NewButton.Click += NewButton_Click;
             SaveButton.Click += SaveButton_Click;
             DeleteButton.Click += DeleteButton_Click;
 
@@ -71,20 +58,20 @@ namespace KooliProjekt.WinFormsApp
             // Lae andmed uuesti
         }
 
-        private void AddButton_Click(object? sender, EventArgs e)
+        private void NewButton_Click(object? sender, EventArgs e)
         {
             // Kutsu presenteri UpdateView meetodi
         }
 
-        private void ProductsGrid_SelectionChanged(object? sender, EventArgs e)
+        private void TodoListsGrid_SelectionChanged(object? sender, EventArgs e)
         {
-            if (ProductsGrid.SelectedRows.Count == 0)
+            if (TodoListsGrid.SelectedRows.Count == 0)
             {
                 SelectedItem = null;
             }
             else
             {
-                SelectedItem = (Product)ProductsGrid.SelectedRows[0].DataBoundItem;
+                SelectedItem = (Product)TodoListsGrid.SelectedRows[0].DataBoundItem;
             }
 
             Presenter.UpdateView(SelectedItem);
