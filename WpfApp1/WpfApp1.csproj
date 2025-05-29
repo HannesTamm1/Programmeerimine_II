@@ -17,8 +17,4 @@
     <PackageReference Include="Moq.AutoMock" Version="3.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\PublicApi\KooliProjekt.PublicAPI.csproj" />
-  </ItemGroup>
-
 </Project>

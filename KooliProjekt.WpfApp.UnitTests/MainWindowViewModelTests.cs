@@ -1,4 +1,4 @@
-using KooliProjekt.PublicAPI.Api;
+using WpfApp1.Api;
 using Moq;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;

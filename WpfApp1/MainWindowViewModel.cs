@@ -1,4 +1,4 @@
-﻿using KooliProjekt.PublicAPI.Api;
+﻿using WpfApp1.Api;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Input;
