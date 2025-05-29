@@ -1,9 +1,7 @@
-﻿using WpfApp1.Api;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Xml.Linq;
-using WpfApp1;
+using WpfApp1.Api;
+
 
 namespace WpfApp1
 {
@@ -14,6 +12,7 @@ namespace WpfApp1
         public ICommand SaveCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
         public Predicate<Product> ConfirmDelete { get; set; }
+        public Action<string> OnError { get; set; }
 
         private readonly IApiClient _apiClient;
 
@@ -78,14 +77,19 @@ namespace WpfApp1
         {
             Lists.Clear();
 
-            var result = await _apiClient.List();
-            if (result.HasError)
+            var lists = await _apiClient.List();
+
+            if (lists.HasError)
             {
-                // Handle error
+                if (OnError != null)
+                {
+                    OnError(lists.Error);
+                }
+
                 return;
             }
 
-            foreach (var list in result.Value)
+            foreach (var list in lists.Value)
             {
                 Lists.Add(list);
             }

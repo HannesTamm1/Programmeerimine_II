@@ -1,48 +1,54 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
-using WpfApp1;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+using WpfApp1.Api;
 
-namespace WpfApp1
+namespace WpfApp1;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+
+        Loaded += MainWindow_Loaded;
+    }
+
+    private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        var viewModel = new MainWindowViewModel();
+        viewModel.ConfirmDelete = _ =>
         {
-            InitializeComponent();
-
-            Loaded += MainWindow_Loaded;
-        }
-
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+            var result = MessageBox.Show(
+                            "Are you sure you want to delete selected item?",
+                            "Delete list",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Stop
+                            );
+            return (result == MessageBoxResult.Yes);
+        };
+        viewModel.OnError = (error) =>
         {
-            var viewModel = new MainWindowViewModel();
-            viewModel.ConfirmDelete = _ =>
-            {
-                var result = MessageBox.Show(
-                                "Are you sure you want to delete selected item?",
-                                "Delete list",
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Stop
-                                );
-                return (result == MessageBoxResult.Yes);
-            };
+            MessageBox.Show(
+                    error,
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+        };
 
-            DataContext = viewModel;
+        DataContext = viewModel;
 
-            await viewModel.Load();
-        }
-
-        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-
-        }
+        await viewModel.Load();
     }
 }
